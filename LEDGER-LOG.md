@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-11-08 · C-APP · Table overflow fixed
+[session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
+
+- **Wrote:** `app/src/views/IngredientTable.tsx`, `app/src/styles.css`.
+- **Rows:** C-8 (fix, state unchanged).
+- **Decisions:** none.
+- **Answers acted on:** none.
+- **Prompts:** none changed.
+- **Cause:** the curve layer was sized to the scroll box's scrollWidth; its scrollbar shrank the box, the next measure grew the layer (both scrollbars on desktop, 736 px in 721). Fix: no scroll box, curve layer covers 100 %; tighter columns under 400 px. Checked 5 fixtures at 360, 375, 412 px and desktop: no overflow, no curve outside the table.
+- **Next:** Vilhelm pushes; phone cook-through.
+
 ### 2026-11-08 · C-APP · Tools as chips with curves
 [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
 

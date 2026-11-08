@@ -10,7 +10,6 @@ export function IngredientTable({ recipe, steps }: { recipe: Recipe; steps: Step
 	const table = useMemo(() => layoutTree(buildTree(recipe, steps)), [recipe, steps]);
 	const inner = useRef<HTMLDivElement>(null);
 	const [selected, setSelected] = useState<string>();
-	const [box, setBox] = useState({ w: 0, h: 0 });
 	const [paths, setPaths] = useState<{ key: string; d: string; strong: boolean }[]>([]);
 	const uses = useMemo(
 		() => Object.entries(recipe.nodes).flatMap(([op, n]) => (n.kind === "operation" ? (n.tools ?? []).map((t) => ({ tool: t, op })) : [])),
@@ -23,7 +22,6 @@ export function IngredientTable({ recipe, steps }: { recipe: Recipe; steps: Step
 		if (!el) return;
 		const measure = () => {
 			const o = el.getBoundingClientRect();
-			setBox({ w: el.scrollWidth, h: el.scrollHeight });
 			const out: { key: string; d: string; strong: boolean }[] = [];
 			for (const { tool, op } of uses) {
 				const chip = el.querySelector(`[data-tool="${tool}"]`);
@@ -70,7 +68,7 @@ export function IngredientTable({ recipe, steps }: { recipe: Recipe; steps: Step
 				</table>
 				{/* curves run behind the table so labels stay readable; a selected tool's
 				    curves are drawn strong and the cells it serves are outlined */}
-				<svg className="splines under" width={box.w} height={box.h} aria-hidden="true">
+				<svg className="splines under" aria-hidden="true">
 					{[...paths.filter((p) => !p.strong), ...paths.filter((p) => p.strong)].map((p) => (
 						<path key={p.key} d={p.d} className={`spline${p.strong ? " strong" : ""}`} />
 					))}

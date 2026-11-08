@@ -160,7 +160,9 @@ button { font: inherit; color: inherit; }
 .lc-out .serve { color: var(--accent); }
 
 /* Bracket table (ingredient list as a compact recipe graph) */
-.btable-wrap { overflow-x: auto; margin: 0 -4px; }
+/* No scroll box: the table fits the width (vertical step labels), and a scroll box
+   around measured curves fed back into its own size. */
+.btable-wrap { max-width: 100%; }
 .btable { border-collapse: separate; border-spacing: 2px; font-size: 0.9rem; width: 100%; }
 .btable td { padding: 4px 6px; vertical-align: middle; }
 .bt-leaf { min-width: 7rem; border-bottom: 1px solid var(--line); line-height: 1.25; }
@@ -239,10 +241,18 @@ button { font: inherit; color: inherit; }
 .tool-chip.on { border-color: var(--accent); background: var(--accent); color: var(--accent-fg); }
 .tool-chip.hot { border-color: var(--accent); color: var(--accent); font-weight: 600; }
 .tool-chip.on.hot { color: var(--accent-fg); }
-.splines { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; }
+.splines { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
 .splines.under { z-index: 0; }
 .btable-inner .btable, .tool-chips { position: relative; z-index: 1; }
 .bt-op.tool-target { outline: 3px solid var(--accent); outline-offset: 1px; }
 .bt-prep.tool-target { color: var(--accent); font-weight: 600; }
 .spline { fill: none; stroke: var(--muted); stroke-width: 1.2; opacity: 0.35; }
 .spline.strong { stroke: var(--accent); stroke-width: 2.5; opacity: 0.95; }
+
+/* Narrow phones (< 400 px): tighter bracket columns so 7-deep recipes still fit */
+@media (max-width: 400px) {
+	.btable { font-size: 0.84rem; border-spacing: 1px; }
+	.bt-leaf { min-width: 5.2rem; padding: 4px 4px; }
+	.bt-op { min-width: 1.55rem; font-size: 0.74rem; }
+	.page { padding-left: 12px; padding-right: 12px; }
+}
