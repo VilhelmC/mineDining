@@ -157,3 +157,21 @@ button { font: inherit; color: inherit; }
 .lc-tools { color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
 .lc-out { margin-top: 4px; font-weight: 600; }
 .lc-out .serve { color: var(--accent); }
+
+/* Bracket table (ingredient list as a compact recipe graph) */
+.btable-wrap { overflow-x: auto; margin: 0 -4px; }
+.btable { border-collapse: separate; border-spacing: 2px; font-size: 0.9rem; width: 100%; }
+.btable td { padding: 4px 6px; vertical-align: middle; }
+.bt-leaf { min-width: 7rem; border-bottom: 1px solid var(--line); line-height: 1.25; }
+.bt-reference { font-style: italic; color: var(--muted); }
+.bt-prep { color: var(--muted); font-size: 0.85rem; }
+.bt-op { width: 1%; min-width: 1.9rem; padding: 6px 0 !important; text-align: center; border-radius: 6px; background: color-mix(in srgb, var(--active) 16%, var(--card)); border-left: 3px solid var(--active); font-size: 0.8rem; line-height: 1.2; }
+.bt-op.bt-passive { background: color-mix(in srgb, var(--passive) 16%, var(--card)); border-left-color: var(--passive); }
+.bt-op.bt-serve { background: color-mix(in srgb, var(--accent) 16%, var(--card)); border-left-color: var(--accent); }
+/* Step labels run bottom-to-top so each bracket column stays narrow, whatever the verb. */
+.bt-op > span { display: inline-block; writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; }
+.bt-verb { font-weight: 600; text-transform: capitalize; }
+.bt-dur, .bt-share { color: var(--muted); font-size: 0.72rem; }
+.bt-dur::before, .bt-share::before { content: " · "; }
+.plain-list { margin-top: 8px; color: var(--muted); }
+.plain-list summary { cursor: pointer; }

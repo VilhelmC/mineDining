@@ -2,15 +2,8 @@ import type { Ingredient, Tool } from "@minedining/recipe-spec";
 import { quantity } from "@minedining/recipe-spec";
 import type { Loaded } from "../recipes";
 import { href } from "../router";
-
-/** "2 scallion" → "2 scallions": a bare count (no noun) of more than one names the ingredient in the plural. */
-function displayName(n: Ingredient): string {
-	const q = n.quantity;
-	if (!("unit" in q) || q.unit !== "count" || q.noun) return n.name;
-	const v = q.value;
-	if (typeof v === "number" && v <= 1) return n.name;
-	return /(s|sh|ch|x)$/.test(n.name) ? n.name + "es" : n.name + "s";
-}
+import { IngredientTable } from "./IngredientTable";
+import { displayName } from "../format";
 
 export function Issues({ loaded }: { loaded: Loaded }) {
 	if (!loaded.issues.length) return null;
@@ -62,15 +55,19 @@ export function RecipeView({ loaded }: { loaded: Loaded }) {
 			<Issues loaded={loaded} />
 
 			<h2>Ingredients</h2>
-			<ul className="ingredients">
-				{ingredients.map(([id, n]) => (
-					<li key={id}>
-						<span className="qty">{quantity(n.quantity, n.name)}</span> <span>{displayName(n)}</span>
-						{n.optional && <span className="muted"> (optional)</span>}
-						{n.note && <div className="muted small">{n.note}</div>}
-					</li>
-				))}
-			</ul>
+			<IngredientTable recipe={r} steps={loaded.steps!} />
+			<details className="plain-list">
+				<summary>As a plain list</summary>
+				<ul className="ingredients">
+					{ingredients.map(([id, n]) => (
+						<li key={id}>
+							<span className="qty">{quantity(n.quantity, n.name)}</span> <span>{displayName(n)}</span>
+							{n.optional && <span className="muted"> (optional)</span>}
+							{n.note && <div className="muted small">{n.note}</div>}
+						</li>
+					))}
+				</ul>
+			</details>
 
 			<h2>Tools</h2>
 			<ul className="tools">

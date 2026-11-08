@@ -18,6 +18,16 @@
 
 ---
 
+### 2026-11-08 · C-APP · Bracket-table ingredient list
+[session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
+
+- **Wrote:** `app/src/graph/tree.ts` (+ `tree.test.ts`), `app/src/views/IngredientTable.tsx` (new); `app/src/views/RecipeView.tsx`, `app/src/format.ts` (`displayName` moved here), `app/src/styles.css`; `LEDGER.md` C-8, C-9, §3; prompt.
+- **Rows:** C-8 `done`; C-9 added `todo` (latest-start scheduling, proposed, awaiting Vilhelm).
+- **Decisions:** taken — bracket table and its non-tree rules.
+- **Answers acted on:** none.
+- **Prompts:** C-APP swept; falsifier still true. Tests 26 green; all 5 fixtures fit 412 px, no errors.
+- **Next:** Vilhelm pushes; decide C-9.
+
 ### 2026-11-08 · C-APP · Lane graph view
 [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
 
