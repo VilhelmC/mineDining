@@ -3,7 +3,9 @@ import { quantity } from "@minedining/recipe-spec";
 import type { Loaded } from "../recipes";
 import { href } from "../router";
 import { IngredientTable } from "./IngredientTable";
-import { clock, displayName } from "../format";
+import { StepsCook } from "./StepsCook";
+import { CookBar } from "./CookBar";
+import { displayName } from "../format";
 import { ACTIVE_DEFAULT, PASSIVE_DEFAULT } from "../cook/scheduler";
 
 function totalText(s: number): string {
@@ -41,7 +43,7 @@ export function RecipeView({ loaded }: { loaded: Loaded }) {
 	const tools = nodes.filter((e): e is [string, Tool] => e[1].kind === "tool");
 	const m = r.meta;
 	return (
-		<div className="page">
+		<div className="page with-bar">
 			<a className="back" href={href({ name: "list" })}>‹ Recipes</a>
 			<h1>{m.title}</h1>
 			<p className="muted">
@@ -55,12 +57,11 @@ export function RecipeView({ loaded }: { loaded: Loaded }) {
 			</p>
 			{m.description && <p>{m.description}</p>}
 			<div className="actions">
-				<a className="big primary" href={href({ name: "cook", id: loaded.id })}>Cook</a>
 				<a className="big" href={href({ name: "graph", id: loaded.id })}>Graph</a>
 			</div>
 			<Issues loaded={loaded} />
 
-			<h2>Ingredients</h2>
+			<h2>Ingredients and tools</h2>
 			<IngredientTable recipe={r} steps={loaded.steps!} />
 			<details className="plain-list">
 				<summary>As a plain list</summary>
@@ -73,33 +74,24 @@ export function RecipeView({ loaded }: { loaded: Loaded }) {
 						</li>
 					))}
 				</ul>
+				<ul className="tools">
+					{tools.map(([id, t]) => (
+						<li key={id}>
+							{t.name}
+							{t.optional && <span className="muted"> (optional)</span>}
+						</li>
+					))}
+				</ul>
 			</details>
-
-			<h2>Tools</h2>
-			<ul className="tools">
-				{tools.map(([id, t]) => (
-					<li key={id}>
-						{t.name}
-						{t.optional && <span className="muted"> (optional)</span>}
-					</li>
-				))}
-			</ul>
 
 			<h2>Steps</h2>
 			{loaded.plan && (
 				<p className="muted">
-					About {totalText(loaded.plan.total)} in total{loaded.plan.estimated ? ` (estimate: steps without a time count ${ACTIVE_DEFAULT / 60} min hands-on, ${PASSIVE_DEFAULT / 60} min waiting)` : ""}.
+					About {totalText(loaded.plan.total)} in total{loaded.plan.estimated ? ` (estimate: steps without a time count ${ACTIVE_DEFAULT / 60} min hands-on, ${PASSIVE_DEFAULT / 60} min waiting)` : ""}. Times are planned starts; preheating starts as late as still works.
 				</p>
 			)}
-			<ol className="steps">
-				{loaded.steps!.map((s) => (
-					<li key={s.op}>
-						<span className="at">{clock(loaded.plan?.start.get(s.op) ?? 0)}</span> <span className={`badge ${s.attention}`}>{s.attention}</span> {s.text}
-						{s.note && <div className="muted small">{s.note}</div>}
-					</li>
-				))}
-			</ol>
-			<p className="muted small">Steps are generated from the recipe graph and ordered as cooking mode will suggest them: waiting steps start early, preheating starts at the latest time that still has the oven hot when needed. Times are planned starts.</p>
+			<StepsCook />
+			<CookBar />
 		</div>
 	);
 }

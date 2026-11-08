@@ -22,12 +22,16 @@ npm run build -w app
 |---|---|
 | `src/recipes.ts` | loads `spec/fixtures/*.recipe.json` (bundled) through `migrate()` + `validate()` |
 | `src/router.ts` | hash routes `#/`, `#/r/<id>`, `#/r/<id>/graph`, `#/r/<id>/cook` |
-| `src/views/` | `RecipeList`, `RecipeView`, `GraphView` (React Flow + dagre, lazy-loaded), `CookingMode` |
+| `src/views/` | `RecipeList`; `RecipeView` = `IngredientTable` (bracket table) + `StepsCook` (step list = cook interface) + `CookBar` (sticky bar, timeline); `LaneView` (lanes) and `GraphView` (map, React Flow + dagre, lazy) |
+| `src/cook/session.tsx` | one cooking session per recipe, shared by all views (progress, tick-off, alerts) |
+| `src/graph/` | `lanes.ts` (lane layout), `tree.ts` (bracket table) |
 | `src/cook/scheduler.ts` | live scheduler on `Step.dependsOn` — pure; rules in its header comment; tests beside it |
 | `src/cook/alerts.ts`, `wakeLock.ts`, `storage.ts` | sound/vibration/notification, screen wake lock, session persistence |
 | `public/` | icons; `icon.svg` is the source |
 
 ## Cooking-mode behaviour (settled with Vilhelm 2026-11-08)
+
+- Cooking runs on the recipe page: Start cooking turns the step list into the cook interface; a sticky bar shows the current step, running timers and a plan timeline (drag to preview where the plan is at a time). Every view (table, list, lanes, map) shows done / current / running; tapping a step cell or tick box ticks it off, cascading to its prerequisites (untick cascades to its dependents).
 
 - Passive steps are started by the cook and run in a background tray; active steps are worked one at a time. Ready = all `dependsOn` done. Steps complete only on Done.
 - Fixed duration → alert at the end. Range → "check" alert at min, "end" alert at max. `until` only → stopwatch, no alert.

@@ -148,6 +148,14 @@ describe("scheduler rules", () => {
 		expect(S.dueAlerts(r, s, 10_000_000)).toEqual([]);
 	});
 
+	it("check cascades to prerequisites; uncheck cascades to dependents", () => {
+		let s = S.check(steps, S.newState("x", 0), "plate", 5);
+		expect(steps.every((x) => S.statusOf(x, s) === "done")).toBe(true);
+		s = S.uncheck(steps, s, "chop");
+		expect(["chop", "fry", "plate"].map((o) => S.statusOf(steps.find((x) => x.op === o)!, s))).toEqual(["ready", "blocked", "blocked"]);
+		expect(S.statusOf(steps[0], s)).toBe("done"); // boil untouched
+	});
+
 	it("done steps raise no alerts; undo restores", () => {
 		let s = S.done(S.start(S.newState("x", 0), "boil", 0), "boil", 100);
 		expect(S.dueAlerts(steps, s, 10_000_000)).toEqual([]);

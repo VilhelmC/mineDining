@@ -165,7 +165,7 @@ button { font: inherit; color: inherit; }
 .btable td { padding: 4px 6px; vertical-align: middle; }
 .bt-leaf { min-width: 7rem; border-bottom: 1px solid var(--line); line-height: 1.25; }
 .bt-reference { font-style: italic; color: var(--muted); }
-.bt-prep { color: var(--muted); font-size: 0.85rem; }
+.bt-prep, .bt-tool { color: var(--muted); font-size: 0.85rem; }
 .bt-op { width: 1%; min-width: 1.9rem; padding: 6px 0 !important; text-align: center; border-radius: 6px; background: color-mix(in srgb, var(--active) 16%, var(--card)); border-left: 3px solid var(--active); font-size: 0.8rem; line-height: 1.2; }
 .bt-op.bt-passive { background: color-mix(in srgb, var(--passive) 16%, var(--card)); border-left-color: var(--passive); }
 .bt-op.bt-serve { background: color-mix(in srgb, var(--accent) 16%, var(--card)); border-left-color: var(--accent); }
@@ -176,3 +176,58 @@ button { font: inherit; color: inherit; }
 .bt-dur::before, .bt-share::before { content: " · "; }
 .plain-list { margin-top: 8px; color: var(--muted); }
 .plain-list summary { cursor: pointer; }
+
+/* Cooking on the recipe page: step list, sticky bar, progress in every view */
+.with-bar { padding-bottom: 190px !important; }
+.big.wide { width: 100%; }
+.steps.live { list-style: none; padding: 0; }
+.step-row { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.step-body { flex: 1; min-width: 0; }
+.step-run { display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+.step-run .timer { margin-left: auto; }
+.tick { flex: none; width: 28px; height: 28px; border-radius: 8px; border: 2px solid var(--line); background: var(--card); color: var(--accent); font-weight: 700; cursor: pointer; padding: 0; line-height: 1; }
+.st-done > .tick, .st-done .tick { border-color: var(--accent); }
+.step-row.st-done .step-body { color: var(--muted); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--muted) 50%, transparent); }
+.step-row.st-blocked .step-body { opacity: 0.6; }
+.step-row.st-running { background: color-mix(in srgb, var(--passive) 8%, transparent); }
+.steps.live .fg { margin: 10px 0; list-style: none; }
+.st-preview { outline: 3px dashed var(--warn) !important; outline-offset: 1px; }
+
+.cookbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; background: var(--card); border-top: 1px solid var(--line); box-shadow: 0 -4px 16px rgb(0 0 0 / 0.12); padding: 8px 16px calc(8px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 6px; }
+.cookbar > * { max-width: 728px; width: 100%; margin: 0 auto; }
+.cb-row { display: flex; gap: 10px; align-items: center; }
+.cb-current { flex: 1; min-width: 0; color: var(--fg); text-decoration: none; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cb-btn { flex: none; min-height: 48px; padding: 0 22px; border-radius: 10px; border: none; background: var(--accent); color: var(--accent-fg); font-weight: 700; font-size: 1.05rem; cursor: pointer; }
+.cb-timers { display: flex; gap: 12px; overflow-x: auto; font-size: 0.85rem; }
+.cb-timer { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; color: var(--muted); }
+.cb-timer .timer.small { flex-direction: row; gap: 4px; align-items: baseline; }
+.cb-timer .timer.small .timer-main { font-size: 1rem; }
+.cb-pills { display: inline-flex; gap: 6px; }
+.timeline { position: relative; }
+.tl-track { position: relative; height: 14px; border-radius: 7px; background: color-mix(in srgb, var(--line) 60%, transparent); overflow: hidden; }
+.tl-step { position: absolute; top: 3px; height: 8px; border-radius: 3px; background: var(--active); opacity: 0.45; }
+.tl-step.passive { width: 3px; background: var(--passive); }
+.tl-step.st-done { opacity: 1; }
+.tl-now { position: absolute; top: 0; bottom: 0; width: 3px; margin-left: -1px; background: var(--fg); }
+.timeline input[type="range"] { position: absolute; left: 0; right: 0; top: -6px; width: 100%; height: 26px; margin: 0; opacity: 0; cursor: ew-resize; }
+.tl-legend { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 4px; font-size: 0.8rem; color: var(--muted); }
+.banners { position: fixed; top: 8px; left: 16px; right: 16px; z-index: 11; max-width: 728px; margin: 0 auto; }
+
+/* progress in the bracket table */
+.bt-op[role="button"] { cursor: pointer; }
+.bt-check { display: block; color: var(--accent); font-weight: 800; font-size: 0.95rem; }
+.bt-op.st-done { opacity: 0.55; }
+.bt-op.st-current { outline: 3px solid var(--accent); outline-offset: 1px; }
+.bt-op.has-p { background-image: linear-gradient(to top, color-mix(in srgb, var(--passive) 45%, transparent) var(--p), transparent var(--p)); }
+.bt-prep.st-done { text-decoration: line-through; }
+.bt-prep.st-current, .bt-prep.st-running { color: var(--passive); font-weight: 600; }
+
+/* progress in the lane view and map */
+.lane-card .tick { width: 24px; height: 24px; margin-right: 2px; }
+.lane-card.st-done { opacity: 0.5; }
+.lane-card.st-current { outline: 3px solid var(--accent); outline-offset: 1px; }
+.lane-card.st-running { background: color-mix(in srgb, var(--passive) 10%, var(--card)); }
+.dot.st-done { background: var(--accent); border-color: var(--accent); }
+.react-flow__node.gn.st-done { opacity: 0.45; }
+.react-flow__node.gn.st-current { outline: 3px solid var(--accent); outline-offset: 2px; }
+.react-flow__node.gn.st-running { background: color-mix(in srgb, var(--passive) 25%, var(--gn-int)); }

@@ -18,6 +18,16 @@
 
 ---
 
+### 2026-11-08 · C-APP · Cooking on the recipe page; tools in the table
+[session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
+
+- **Wrote:** `app/src/cook/session.tsx`, `app/src/views/StepsCook.tsx`, `app/src/views/CookBar.tsx`, `app/src/views/Timer.tsx` (new); `app/src/cook/scheduler.ts` (+ test: `check`, `uncheck`, `ancestors`, `descendants`), `app/src/graph/tree.ts` (+ test: tool rows), `app/src/views/IngredientTable.tsx`, `app/src/views/LaneView.tsx`, `app/src/views/GraphView.tsx`, `app/src/views/RecipeView.tsx`, `app/src/App.tsx`, `app/src/styles.css`, `app/README.md`; `app/src/views/CookingMode.tsx` removed (Vilhelm `git rm`); `LEDGER.md` C-5, C-8, C-10, §3; prompt.
+- **Rows:** C-10 added `done`; C-8 extended (tools); C-5 `drafted` (phone test pending).
+- **Decisions:** taken — tools as rows; cooking on recipe page, graphs separate; cascade ticking; highlight + timeline scrubber (Vilhelm).
+- **Answers acted on:** none.
+- **Prompts:** C-APP swept; falsifier still true. Tests 29 green; headless phone run: start, bar Done ×2, tick Saute in the table → brown/chop/mince/saute done; untick Chop in lanes → chop + saute undone; timeline drag previews Bake at 1:00:00 in table and list; no errors.
+- **Next:** Vilhelm pushes; phone cook-through.
+
 ### 2026-11-08 · C-APP · Latest-start scheduling (C-9)
 [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
 

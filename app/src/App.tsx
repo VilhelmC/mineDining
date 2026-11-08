@@ -3,7 +3,7 @@ import { byId } from "./recipes";
 import { href, useRoute } from "./router";
 import { RecipeList } from "./views/RecipeList";
 import { RecipeView } from "./views/RecipeView";
-import { CookingMode } from "./views/CookingMode";
+import { CookProvider } from "./cook/session";
 import { LaneView } from "./views/LaneView";
 
 // React Flow + dagre are most of the bundle: load them only for the map view.
@@ -21,13 +21,19 @@ export function App() {
 			</div>
 		);
 	}
-	if (route.name === "recipe" || !loaded.recipe) return <RecipeView loaded={loaded} />;
-	if (route.name === "graph") return <LaneView loaded={loaded} />;
-	if (route.name === "map")
-		return (
-			<Suspense fallback={<div className="page muted">Loading map…</div>}>
-				<GraphView loaded={loaded} />
-			</Suspense>
-		);
-	return <CookingMode key={loaded.id} loaded={loaded} />;
+	if (!loaded.recipe) return <RecipeView loaded={loaded} />;
+	return (
+		<CookProvider key={loaded.id} loaded={loaded}>
+			{route.name === "graph" ? (
+				<LaneView loaded={loaded} />
+			) : route.name === "map" ? (
+				<Suspense fallback={<div className="page muted">Loading map…</div>}>
+					<GraphView loaded={loaded} />
+				</Suspense>
+			) : (
+				// "cook" is the recipe page now: cooking runs in its step list
+				<RecipeView loaded={loaded} />
+			)}
+		</CookProvider>
+	);
 }

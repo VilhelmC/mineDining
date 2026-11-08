@@ -6,13 +6,15 @@ import type { Node, Operation, Recipe } from "@minedining/recipe-spec";
 import { quantity } from "@minedining/recipe-spec";
 import type { Loaded } from "../recipes";
 import { GraphHeader } from "./LaneView";
+import { CookBar } from "./CookBar";
+import { stepClass, useCook } from "../cook/session";
 import { durationText } from "../format";
 
 const W = 156;
 const H = 64;
 
 /** Map view: the material/operation DAG as a node-link drawing, left to right — for wide screens; phones get the lane view. Tools are shown inside their operation (spec §9 q2: not DAG edges). */
-export function buildGraph(r: Recipe): { nodes: FlowNode[]; edges: Edge[] } {
+export function buildGraph(r: Recipe, cls: (op: string) => string = () => ""): { nodes: FlowNode[]; edges: Edge[] } {
 	const all = Object.entries(r.nodes) as [string, Node][];
 	const shown = all.filter(([, n]) => n.kind !== "tool");
 	const edges: Edge[] = [];
@@ -39,7 +41,7 @@ export function buildGraph(r: Recipe): { nodes: FlowNode[]; edges: Edge[] } {
 			data: { label: <Label n={n} r={r} /> },
 			sourcePosition: Position.Right,
 			targetPosition: Position.Left,
-			className: `gn gn-${n.kind}${n.kind === "operation" ? ` gn-${(n as Operation).attention}` : ""}${outputs.has(id) ? " gn-output" : ""}`,
+			className: `gn gn-${n.kind}${n.kind === "operation" ? ` gn-${(n as Operation).attention}` : ""}${outputs.has(id) ? " gn-output" : ""} ${n.kind === "operation" ? cls(id) : ""}`,
 			style: { width: W },
 			draggable: false,
 			connectable: false,
@@ -67,17 +69,21 @@ function Label({ n, r }: { n: Node; r: Recipe }) {
 
 export function GraphView({ loaded }: { loaded: Loaded }) {
 	const r = loaded.recipe!;
-	const { nodes, edges } = useMemo(() => buildGraph(r), [r]);
+	const cook = useCook();
+	const key = cook?.state ? JSON.stringify(cook.steps.map((s) => cook.view(s.op)?.status + (cook.view(s.op)?.current ? "*" : ""))) : "";
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	const { nodes, edges } = useMemo(() => buildGraph(r, (op) => stepClass(cook?.view(op))), [r, key]);
 
 	return (
 		<div className="graph-page">
 			<GraphHeader loaded={loaded} view="map" />
 			<div className="graph">
-				<ReactFlow nodes={nodes} edges={edges} fitView colorMode="system" minZoom={0.2} nodesDraggable={false} nodesConnectable={false} proOptions={{ hideAttribution: false }}>
+				<ReactFlow nodes={nodes} edges={edges} onNodeClick={(_, n) => cook && r.nodes[n.id]?.kind === "operation" && cook.toggle(n.id)} fitView colorMode="system" minZoom={0.2} nodesDraggable={false} nodesConnectable={false} proOptions={{ hideAttribution: false }}>
 					<Background />
 					<Controls showInteractive={false} />
 				</ReactFlow>
 			</div>
+			<CookBar />
 		</div>
 	);
 }

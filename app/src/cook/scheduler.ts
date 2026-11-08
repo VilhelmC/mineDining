@@ -236,6 +236,32 @@ export function undone(state: CookState, op: string): CookState {
 
 export const focus = (state: CookState, op: string | undefined): CookState => ({ ...state, focus: op });
 
+function closure(steps: Step[], op: string, next: (s: Step) => string[]): Set<string> {
+	const byOp = new Map(steps.map((s) => [s.op, s]));
+	const out = new Set<string>();
+	const walk = (o: string) => {
+		for (const x of next(byOp.get(o)!)) if (!out.has(x)) (out.add(x), walk(x));
+	};
+	walk(op);
+	return out;
+}
+export const ancestors = (steps: Step[], op: string) => closure(steps, op, (s) => s.dependsOn);
+export const descendants = (steps: Step[], op: string) => closure(steps, op, (s) => steps.filter((d) => d.dependsOn.includes(s.op)).map((d) => d.op));
+
+/** Tick a step off by hand: it and every unfinished prerequisite are done. */
+export function check(steps: Step[], state: CookState, op: string, now: number): CookState {
+	let s = state;
+	for (const o of [...ancestors(steps, op), op]) if (s.ops[o]?.doneAt === undefined) s = done(s, o, now);
+	return s;
+}
+
+/** Untick by hand: it and every step built on it are not done. */
+export function uncheck(steps: Step[], state: CookState, op: string): CookState {
+	let s = state;
+	for (const o of [op, ...descendants(steps, op)]) if (s.ops[o]?.doneAt !== undefined) s = undone(s, o);
+	return s;
+}
+
 export function markFired(state: CookState, due: Due[]): CookState {
 	let s = state;
 	for (const d of due) s = put(s, d.op, { fired: [...(s.ops[d.op]?.fired ?? []), d.kind] });

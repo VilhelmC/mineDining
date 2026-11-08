@@ -3,7 +3,9 @@ import type { Input, Node, Operation, Recipe, Temperature } from "@minedining/re
 import { quantity } from "@minedining/recipe-spec";
 import { laneLayout, type LaneRow } from "../graph/lanes";
 import { durationText } from "../format";
+import { stepClass, useCook } from "../cook/session";
 import type { Loaded } from "../recipes";
+import { CookBar } from "./CookBar";
 import { href } from "../router";
 
 /** Lane pitch and dot position (px). The dot sits level with the card's first line. */
@@ -29,6 +31,7 @@ function tempText(t: Temperature): string {
 }
 
 function Gutter({ row, lanes }: { row: LaneRow; lanes: number }) {
+	const view = useCook()?.view(row.step.op);
 	const x = (l: number) => 8 + l * PITCH;
 	const v = (key: string, l: number, dashed: boolean) => <i key={key} className={`ln v${dashed ? " dashed" : ""}`} style={{ left: x(l), top: 0, bottom: 0 }} />;
 	const els = [];
@@ -43,7 +46,7 @@ function Gutter({ row, lanes }: { row: LaneRow; lanes: number }) {
 		}
 	}
 	if (row.continues) els.push(<i key="own" className={`ln v${row.dashed ? " dashed" : ""}`} style={{ left: x(row.lane), top: DOT_Y, bottom: 0 }} />);
-	els.push(<i key="dot" className={`dot ${row.step.attention}`} style={{ left: x(row.lane), top: DOT_Y }} />);
+	els.push(<i key="dot" className={`dot ${row.step.attention} ${stepClass(view)}`} style={{ left: x(row.lane), top: DOT_Y }} />);
 	return (
 		<div className="gutter" style={{ width: 16 + (lanes - 1) * PITCH }}>
 			{els}
@@ -52,6 +55,8 @@ function Gutter({ row, lanes }: { row: LaneRow; lanes: number }) {
 }
 
 function Card({ row, r }: { row: LaneRow; r: Recipe }) {
+	const cook = useCook();
+	const v = cook?.view(row.step.op);
 	const op = r.nodes[row.step.op] as Operation;
 	const p = op.params ?? {};
 	const ingredients = op.inputs.filter((i) => r.nodes[i.ref].kind === "ingredient");
@@ -60,8 +65,13 @@ function Card({ row, r }: { row: LaneRow; r: Recipe }) {
 	const outputs = new Set(r.outputs);
 	const name = (id: string) => (r.nodes[id] as { name: string }).name;
 	return (
-		<div className={`lane-card ${op.attention}`}>
+		<div className={`lane-card ${op.attention} ${stepClass(v)}`} id={`lane-${row.step.op}`}>
 			<div className="lc-head">
+				{cook && (
+					<button className="tick" aria-label={v?.status === "done" ? "Mark not done" : "Mark done"} onClick={() => cook.toggle(row.step.op)}>
+						{v?.status === "done" ? "✓" : ""}
+					</button>
+				)}
 				<strong className="lc-verb">{op.verb.replace(/-/g, " ")}</strong>
 				{p.duration && <span className="lc-chip">{durationText(p.duration)}</span>}
 				{p.temperature && <span className="lc-chip">{tempText(p.temperature)}</span>}
@@ -112,7 +122,7 @@ export function LaneView({ loaded }: { loaded: Loaded }) {
 	return (
 		<div className="cook">
 			<GraphHeader loaded={loaded} view="graph" />
-			<div className="lanes">
+			<div className="lanes with-bar">
 			{layout.rows.map((row) => (
 				<div key={row.step.op} className="lane-row">
 					<Gutter row={row} lanes={layout.lanes} />
@@ -120,6 +130,7 @@ export function LaneView({ loaded }: { loaded: Loaded }) {
 				</div>
 			))}
 			</div>
+			<CookBar />
 		</div>
 	);
 }
