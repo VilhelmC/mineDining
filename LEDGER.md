@@ -20,7 +20,7 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 |---|---|---|---|---|---|
 | C-SETUP | Project setup + design brief | 2026-11-08 | [session](https://claude.ai/code/session_01WGDGhYqkmSvqNPDEVbbK8L) | — | this ledger, `PROJECT-STATE.md`, `docs/DESIGN-BRIEF.md` |
 | C-ARCH | Recipe DAG schema + core architecture | 2026-11-08 | [session](https://claude.ai/code/session_01WGDGhYqkmSvqNPDEVbbK8L) (continued from C-SETUP) | `Continuation_Prompts/OBSOLETE/C-ARCH_schema-and-architecture.md` (superseded) | rows A-2..A-7, `spec/`, `docs/prior-art.md` |
-| C-APP | PWA scaffold + cooking mode | — | *(paste when opened)* | `Continuation_Prompts/C-APP_pwa-cooking-mode.md` | rows C-1..C-6, `app/`; `spec/validator/` code (not schema) |
+| C-APP | PWA scaffold + cooking mode | 2026-11-08 | [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr) | `Continuation_Prompts/C-APP_pwa-cooking-mode.md` | rows C-1..C-6, `app/`; `spec/validator/` code (not schema) |
 
 ### 1b · Continuation prompts
 
@@ -30,7 +30,7 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 |---|---|---|---|---|---|
 | `_TEMPLATE.md` | the house format | n/a | 2026-11-08 | 2026-11-08 | n/a — copy it, do not work from it |
 | `OBSOLETE/C-ARCH_schema-and-architecture.md` | DAG schema spec, validator, versioning, platform | SUPERSEDED 2026-11-08 by C-APP — commission done | 2026-11-08 | 2026-11-08 | n/a |
-| `C-APP_pwa-cooking-mode.md` | PWA scaffold, recipe + graph views, cooking mode | COMMISSION | 2026-11-08 | 2026-11-08 | yes (cold-read 2026-11-08) |
+| `C-APP_pwa-cooking-mode.md` | PWA scaffold, recipe + graph views, cooking mode | CONTINUE (C-1..C-3 done; C-5 awaits phone test) | 2026-11-08 | 2026-11-08 (C-APP, updated) | yes (cold-read 2026-11-08 on start: 2 gaps, fixed) |
 
 ---
 
@@ -54,12 +54,12 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 
 | # | Item | State | Next action |
 |---|---|---|---|
-| C-1 | PWA scaffold in `app/`, spec package wired in | `specified` [cp] | C-APP task 1 |
-| C-2 | Recipe list from fixtures | `specified` [cp] | C-APP task 2 |
-| C-3 | Recipe view: ingredients, tools, generated steps | `specified` [cp] | C-APP task 3 |
-| C-4 | Graph view of the DAG | `specified` [cp] | C-APP task 4 |
-| C-5 | Cooking mode: step-by-step, Wake Lock, timers, passive steps | `specified` [cp] | C-APP task 5 |
-| C-6 | Phone testing route (HTTPS) | `specified` [cp] | C-APP task 6; Vilhelm decides |
+| C-1 | PWA scaffold in `app/`, spec package wired in | `done` [cp] | npm workspaces at root (§3); `app/README.md`. Vilhelm: `npm install` at root on Windows |
+| C-2 | Recipe list from fixtures | `done` [cp] | bundled via `import.meta.glob`, through migrate+validate |
+| C-3 | Recipe view: ingredients, tools, generated steps | `done` [cp] | — |
+| C-4 | Graph view of the DAG | `drafted` [cp] | React Flow + dagre (Vilhelm, §3). Works; on a portrait phone the whole graph fits too small to read — consider an initial zoom on the first column |
+| C-5 | Cooking mode: step-by-step, Wake Lock, timers, passive steps | `drafted` [cp] | built per §3 behaviour decision; scheduler tested. `done` after a cook-through on Vilhelm's phone (needs C-6) |
+| C-6 | Phone testing route (HTTPS) | `blocked` [cp] | on Vilhelm: decide route (§3, proposed GitHub Pages, `.github/workflows/pages.yml` manual-only); tell C-APP his phone OS + version |
 
 ### B · Backlog — later workstreams (no owner yet)
 
@@ -92,6 +92,10 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 | 2026-11-08 | Spec language: JSON Schema 2020-12 canonical, TS types generated, validator in TS | taken (Vilhelm) | `spec/README.md` | C-ARCH |
 | 2026-11-08 | Spec v0.1.0 model: bipartite material/operation DAG, tools separate, `after` edges, outputs + byproducts, split amounts, canonical units + source text | taken | `spec/README.md` §2–§9 | C-ARCH |
 | 2026-11-08 | Spec revision procedure (fixture first, bump, freeze, migrate, regenerate, log) | taken | `spec/VERSIONING.md` | C-ARCH |
+| 2026-11-08 | App consumes the spec package through npm workspaces at the root (`spec/validator`, `app`), one root lockfile | taken | `package.json`, `app/README.md` | C-APP |
+| 2026-11-08 | Graph view library: React Flow (`@xyflow/react`) + `@dagrejs/dagre`, lazy-loaded | taken (Vilhelm) | C-4 | C-APP |
+| 2026-11-08 | Cooking mode: until-only passive = stopwatch + Done; range = alert at min and max; wall-clock timers, catch-up on return, optional system notification when hidden | taken (Vilhelm) | `app/README.md`, `app/src/cook/scheduler.ts` | C-APP |
+| 2026-11-08 | Phone testing route: GitHub Pages via manual workflow (proposed) | **open** — Vilhelm decides | C-6, `.github/workflows/pages.yml` | C-APP |
 
 ---
 

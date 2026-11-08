@@ -18,6 +18,16 @@
 
 ---
 
+### 2026-11-08 · C-APP · PWA scaffold, views, cooking mode
+[session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
+
+- **Wrote:** `package.json`, `package-lock.json` (root, npm workspaces); `app/` (package.json, index.html, vite.config.ts, tsconfig.json, README.md, public/ icons, src/main.tsx, App.tsx, router.ts, recipes.ts, format.ts, styles.css, views/RecipeList.tsx, views/RecipeView.tsx, views/GraphView.tsx, views/CookingMode.tsx, cook/scheduler.ts, cook/scheduler.test.ts, cook/alerts.ts, cook/wakeLock.ts, cook/storage.ts); `.github/workflows/pages.yml`; `spec/README.md` §12; `PROJECT-STATE.md` §3, §5, §7; `LEDGER.md` §1, §1b, §2 C, §3; `TODO.md`; `Continuation_Prompts/C-APP_pwa-cooking-mode.md`. Untracked build output `node_modules/` (partial, Linux) and `app/dist/` are gitignored.
+- **Rows:** C-1, C-2, C-3 `done`; C-4, C-5 `drafted`; C-6 `blocked` on Vilhelm.
+- **Decisions:** taken — npm workspaces; React Flow + dagre (Vilhelm); cooking-mode timer/alert rules (Vilhelm). Opened — phone testing route (proposed GitHub Pages).
+- **Answers acted on:** none (answered in conversation).
+- **Prompts:** C-APP stamped on start (falsifier held); cold-read 2 gaps, fixed; updated to CONTINUE, falsifier still true. Tests: validator 24, app 12 green; production build checked in a phone-sized headless browser, no console errors.
+- **Next:** Vilhelm commits, runs `npm install` at the root, decides C-6; then cook-through on his phone.
+
 ### 2026-11-08 · C-ARCH · Spec v0.1.0, validator, platform; commission closed
 [session](https://claude.ai/code/session_01WGDGhYqkmSvqNPDEVbbK8L)
 

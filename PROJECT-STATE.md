@@ -25,6 +25,7 @@ Cooking from a recipe means reading, timing and improvising with occupied hands,
 
 - **Recipe DAG spec v0.1.0** — `spec/README.md` (normative), `spec/schema/recipe.schema.json`; 5 fixtures in `spec/fixtures/`.
 - **Validator + reference step generator** — `spec/validator/` (TypeScript, `npm test` green), including the "nothing implicit" acceptance test.
+- **PWA** — `app/` (React + TS + Vite, installable, service worker): recipe list, recipe view, graph view, cooking mode with a live scheduler (`app/src/cook/scheduler.ts`, tested). Not yet tried on a phone. Root is an npm workspace.
 - Prior art read and assessed — `docs/prior-art.md`: no existing format is a dependency graph.
 - Feature set and order of work — `docs/DESIGN-BRIEF.md`.
 
@@ -40,7 +41,7 @@ Full register: `LEDGER.md` §3.
 
 ## 5 · Order of work
 
-See `docs/DESIGN-BRIEF.md` §5. Spec v0.1 done (C-ARCH). Now: the PWA and cooking mode (thread C-APP). Next candidates: link import (B-1), a spec revision round (A-7).
+See `docs/DESIGN-BRIEF.md` §5. Spec v0.1 done (C-ARCH). PWA and cooking mode built (C-APP); next is phone testing over HTTPS (row C-6). Next candidates: link import (B-1), a spec revision round (A-7).
 
 ## 6 · Known inconsistencies in the corpus
 
@@ -58,7 +59,9 @@ None known (2026-11-08).
 | `TODO*.md` | dated tasks |
 | `docs/` | design documents; `docs/DESIGN-BRIEF.md` is the feature set, `docs/prior-art.md` |
 | `spec/` | the recipe DAG spec, schema, fixtures, validator (`spec/validator/`) |
-| `app/` | the PWA (from C-APP) |
+| `app/` | the PWA (C-APP); `app/README.md` |
+| `package.json`, `package-lock.json` | npm workspaces root (`spec/validator`, `app`) |
+| `.github/workflows/` | `pages.yml` — manual Pages deploy (proposal, C-6) |
 | `Continuation_Prompts/` | one hand-off prompt per thread; `OBSOLETE/` is not built on |
 
 ## 8 · Working conventions

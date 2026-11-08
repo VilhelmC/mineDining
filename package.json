@@ -1,0 +1,14 @@
+{
+	"name": "minedining",
+	"private": true,
+	"description": "mineDining — npm workspaces root: the recipe spec package and the app",
+	"workspaces": [
+		"spec/validator",
+		"app"
+	],
+	"scripts": {
+		"dev": "npm run dev -w app",
+		"build": "npm run build -w spec/validator && npm run build -w app",
+		"test": "npm test -w spec/validator && npm test -w app"
+	}
+}

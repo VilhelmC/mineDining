@@ -112,7 +112,7 @@ Logged as *Unreleased → candidates* in `spec/CHANGELOG.md`; each needs a fixtu
 
 ## 12 · Tooling
 
-Run once per workstation, from `spec\validator`:
+The repository root is an npm workspace (`spec/validator`, `app`) with one lockfile, `package-lock.json` at the root; `spec/validator/package-lock.json` is no longer used. Run once per workstation, from the project root (`npm install` builds this package), then from `spec\validator`:
 
 ```
 npm install
