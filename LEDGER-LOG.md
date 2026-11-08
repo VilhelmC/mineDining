@@ -18,6 +18,16 @@
 
 ---
 
+### 2026-11-08 · C-APP · Cooking bar as the primary control
+[session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
+
+- **Wrote:** `app/src/views/CookBar.tsx` (rewritten), `app/src/cook/session.tsx` (`cursor`, `cur`, `position`), `app/src/styles.css`; `LEDGER.md` §3; prompt.
+- **Rows:** C-10 (extended, state unchanged).
+- **Decisions:** taken — bar is the primary control (Vilhelm's three points: no dead "waiting" state, visible scrubber, step navigation).
+- **Answers acted on:** none.
+- **Prompts:** C-APP swept; falsifier still true. Headless phone run: waiting shows Simmer + Done; ‹‹ to Brown shows Undo and highlights it in list and table; Now returns; knob 20:00 → 30:00 after a simulated 10 min; no errors.
+- **Next:** Vilhelm pushes; phone cook-through.
+
 ### 2026-11-08 · C-APP · Table overflow fixed
 [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
 

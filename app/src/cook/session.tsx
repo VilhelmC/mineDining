@@ -22,7 +22,7 @@ export interface StepView {
 	current: boolean;
 	/** Running or under-way timed step: elapsed share of its duration, 0..1+. */
 	progress?: number;
-	/** Highlighted by the timeline scrubber. */
+	/** Selected in the cooking bar (browsed with ‹ › or the timeline), not the current step. */
 	preview: boolean;
 }
 
@@ -49,8 +49,13 @@ export interface Cook {
 	focus: (op: string) => void;
 	/** Tick/untick by hand, cascading (scheduler.check / uncheck). Starts a session if none. */
 	toggle: (op: string) => void;
-	preview?: string;
-	setPreview: (op?: string) => void;
+	/** Step the bar is showing when the cook browses away from the current one. */
+	cursor?: string;
+	setCursor: (op?: string) => void;
+	/** The step the process is at: the foreground step, else the running step that ends first. */
+	cur?: Step;
+	/** Where the process is on the plan's clock (seconds): current step's planned start plus its elapsed time. */
+	position: number;
 }
 
 const Ctx = createContext<Cook | undefined>(undefined);
@@ -72,7 +77,7 @@ export function CookProvider({ loaded, children }: { loaded: Loaded; children: R
 	const [now, setNow] = useState(() => Date.now());
 	const [banners, setBanners] = useState<Banner[]>([]);
 	const [notify, setNotify] = useState(readNotify);
-	const [preview, setPreview] = useState<string>();
+	const [cursor, setCursor] = useState<string>();
 	const finished = !!state && S.finished(steps, state);
 	const wake = useWakeLock(live && !!state && !finished);
 	const byOp = useMemo(() => new Map(steps.map((s) => [s.op, s])), [steps]);
@@ -108,6 +113,18 @@ export function CookProvider({ loaded, children }: { loaded: Loaded; children: R
 	}, [now, state, live, steps, byOp, notify, update]);
 
 	const fg = state && live ? S.foreground(steps, state, now) : undefined;
+	const plan = loaded.plan;
+	const run = state ? S.running(steps, state) : [];
+	const ends = (x: Step) => state!.ops[x.op].startedAt! + S.seconds(x).s * 1000;
+	const cur = fg ?? [...run].sort((a, b) => ends(a) - ends(b))[0];
+	let position = 0;
+	if (state && plan) {
+		if (cur) {
+			const started = state.ops[cur.op]?.startedAt;
+			const el = started !== undefined ? (now - started) / 1000 : 0;
+			position = plan.start.get(cur.op)! + Math.min(Math.max(el, 0), S.seconds(cur, "max").s);
+		} else position = S.finished(steps, state) ? plan.total : Math.min(...steps.filter((x) => state.ops[x.op]?.doneAt === undefined).map((x) => plan.start.get(x.op)!));
+	}
 
 	// An active step's clock starts when it reaches the foreground.
 	useEffect(() => {
@@ -146,7 +163,7 @@ export function CookProvider({ loaded, children }: { loaded: Loaded; children: R
 			const t = status !== "done" ? S.timer(s, state, now) : undefined;
 			const tg = S.targets(s);
 			const progress = t && tg.length ? t.elapsed / tg[tg.length - 1].at : undefined;
-			return { status, current: fg?.op === op, progress, preview: preview === op };
+			return { status, current: cur?.op === op, progress, preview: cursor === op && cursor !== cur?.op };
 		},
 		banners,
 		ack,
@@ -190,8 +207,10 @@ export function CookProvider({ loaded, children }: { loaded: Loaded; children: R
 				return next;
 			});
 		},
-		preview,
-		setPreview,
+		cursor,
+		setCursor,
+		cur,
+		position,
 	};
 	return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
