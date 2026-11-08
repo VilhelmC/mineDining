@@ -1,0 +1,197 @@
+{
+	"schemaVersion": "0.1.0",
+	"id": "crepes",
+	"meta": {
+		"title": "Crêpes",
+		"servings": 4,
+		"course": "breakfast",
+		"difficulty": "easy",
+		"tags": [
+			"fixture:linear",
+			"fixture:discrete"
+		]
+	},
+	"nodes": {
+		"flour": {
+			"kind": "ingredient",
+			"name": "plain flour",
+			"quantity": {
+				"value": 125,
+				"unit": "g",
+				"source": {
+					"text": "1 cup"
+				}
+			}
+		},
+		"egg": {
+			"kind": "ingredient",
+			"name": "egg",
+			"quantity": {
+				"value": 2,
+				"unit": "count"
+			},
+			"scaling": {
+				"kind": "discrete",
+				"step": 1,
+				"min": 1
+			}
+		},
+		"milk": {
+			"kind": "ingredient",
+			"name": "milk",
+			"quantity": {
+				"value": 300,
+				"unit": "mL"
+			}
+		},
+		"salt": {
+			"kind": "ingredient",
+			"name": "salt",
+			"quantity": {
+				"value": 1,
+				"unit": "g",
+				"source": {
+					"text": "a pinch"
+				}
+			},
+			"scaling": {
+				"kind": "fixed"
+			}
+		},
+		"butter": {
+			"kind": "ingredient",
+			"name": "butter",
+			"quantity": {
+				"value": 15,
+				"unit": "g"
+			}
+		},
+		"bowl": {
+			"kind": "tool",
+			"name": "mixing bowl"
+		},
+		"whisk": {
+			"kind": "tool",
+			"name": "whisk"
+		},
+		"pan": {
+			"kind": "tool",
+			"name": "crêpe pan",
+			"size": "20 cm"
+		},
+		"whisk-batter": {
+			"kind": "operation",
+			"verb": "whisk",
+			"inputs": [
+				{
+					"ref": "flour"
+				},
+				{
+					"ref": "egg"
+				},
+				{
+					"ref": "milk"
+				},
+				{
+					"ref": "salt"
+				}
+			],
+			"produces": [
+				"batter"
+			],
+			"attention": "active",
+			"tools": [
+				"bowl",
+				"whisk"
+			],
+			"params": {
+				"until": "smooth, without lumps"
+			}
+		},
+		"batter": {
+			"kind": "intermediate",
+			"name": "batter"
+		},
+		"rest-batter": {
+			"kind": "operation",
+			"verb": "rest",
+			"inputs": [
+				{
+					"ref": "batter"
+				}
+			],
+			"produces": [
+				"rested-batter"
+			],
+			"attention": "passive",
+			"params": {
+				"duration": {
+					"value": 1800,
+					"unit": "s"
+				}
+			}
+		},
+		"rested-batter": {
+			"kind": "intermediate",
+			"name": "rested batter"
+		},
+		"melt-butter": {
+			"kind": "operation",
+			"verb": "melt",
+			"inputs": [
+				{
+					"ref": "butter"
+				}
+			],
+			"produces": [
+				"melted-butter"
+			],
+			"attention": "active",
+			"tools": [
+				"pan"
+			],
+			"params": {
+				"temperature": {
+					"heat": "medium"
+				}
+			}
+		},
+		"melted-butter": {
+			"kind": "intermediate",
+			"name": "melted butter"
+		},
+		"cook-crepes": {
+			"kind": "operation",
+			"verb": "cook",
+			"inputs": [
+				{
+					"ref": "rested-batter"
+				},
+				{
+					"ref": "melted-butter"
+				}
+			],
+			"produces": [
+				"crepes"
+			],
+			"attention": "active",
+			"tools": [
+				"pan"
+			],
+			"params": {
+				"temperature": {
+					"heat": "medium"
+				},
+				"until": "edges golden; flip once"
+			},
+			"note": "Thin layer per crêpe; brush the pan with butter between crêpes."
+		},
+		"crepes": {
+			"kind": "intermediate",
+			"name": "crêpes"
+		}
+	},
+	"outputs": [
+		"crepes"
+	]
+}

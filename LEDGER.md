@@ -19,7 +19,8 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 | Key | Thread | Opened | Link | Start a new one from | Owns |
 |---|---|---|---|---|---|
 | C-SETUP | Project setup + design brief | 2026-11-08 | [session](https://claude.ai/code/session_01WGDGhYqkmSvqNPDEVbbK8L) | — | this ledger, `PROJECT-STATE.md`, `docs/DESIGN-BRIEF.md` |
-| C-ARCH | Recipe DAG schema + core architecture | — | *(paste when opened)* | `Continuation_Prompts/C-ARCH_schema-and-architecture.md` | rows A-2..A-6, `spec/`, `docs/prior-art.md` |
+| C-ARCH | Recipe DAG schema + core architecture | 2026-11-08 | [session](https://claude.ai/code/session_01WGDGhYqkmSvqNPDEVbbK8L) (continued from C-SETUP) | `Continuation_Prompts/OBSOLETE/C-ARCH_schema-and-architecture.md` (superseded) | rows A-2..A-7, `spec/`, `docs/prior-art.md` |
+| C-APP | PWA scaffold + cooking mode | — | *(paste when opened)* | `Continuation_Prompts/C-APP_pwa-cooking-mode.md` | rows C-1..C-6, `app/`; `spec/validator/` code (not schema) |
 
 ### 1b · Continuation prompts
 
@@ -28,7 +29,8 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 | Prompt | Scope | Purpose | Written | Last verified | Sufficient to start cold? |
 |---|---|---|---|---|---|
 | `_TEMPLATE.md` | the house format | n/a | 2026-11-08 | 2026-11-08 | n/a — copy it, do not work from it |
-| `C-ARCH_schema-and-architecture.md` | DAG schema spec, validator, versioning, platform | COMMISSION | 2026-11-08 | 2026-11-08 | yes (cold-read 2026-11-08) |
+| `OBSOLETE/C-ARCH_schema-and-architecture.md` | DAG schema spec, validator, versioning, platform | SUPERSEDED 2026-11-08 by C-APP — commission done | 2026-11-08 | 2026-11-08 | n/a |
+| `C-APP_pwa-cooking-mode.md` | PWA scaffold, recipe + graph views, cooking mode | COMMISSION | 2026-11-08 | 2026-11-08 | yes (cold-read 2026-11-08) |
 
 ---
 
@@ -36,16 +38,28 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 
 *One section per workstream, with an owning thread. Rows are edited in place.*
 
-### A · Core app architecture · owner C-ARCH
+### A · Recipe spec and architecture · owner C-ARCH (closed 2026-11-08)
 
 | # | Item | State | Next action |
 |---|---|---|---|
 | A-1 | Fill `PROJECT-STATE.md` §1–§5; write `docs/DESIGN-BRIEF.md` | `done` | — (C-SETUP) |
-| A-2 | Prior-art reading → `docs/prior-art.md` | `specified` [cp] | C-ARCH task 1 |
-| A-3 | Spec language decision; recipe fixtures in `spec/fixtures/` | `specified` [cp] | C-ARCH tasks 2–3 |
-| A-4 | Recipe DAG spec v0.1 + versioning policy (`spec/VERSIONING.md`, `spec/CHANGELOG.md`) | `specified` [cp] | C-ARCH tasks 4–5 |
-| A-5 | Validator + "nothing implicit" acceptance test | `specified` [cp] | C-ARCH tasks 6–7 |
-| A-6 | Platform decision (PWA vs React Native) | `specified` [cp] | C-ARCH task 8; Vilhelm decides |
+| A-2 | Prior-art reading → `docs/prior-art.md` | `done` | Cooking for Engineers table structure unverified (§5 there) |
+| A-3 | Spec language decision; recipe fixtures in `spec/fixtures/` | `done` | 5 fixtures |
+| A-4 | Recipe DAG spec v0.1 + versioning policy (`spec/VERSIONING.md`, `spec/CHANGELOG.md`) | `done` | v0.1.0, `spec/README.md` |
+| A-5 | Validator + "nothing implicit" acceptance test | `done` | `spec/validator/`, `npm test` green |
+| A-6 | Platform decision (PWA vs React Native) | `done` | PWA, React + TS (§3) |
+| A-7 | Spec revision candidates (`spec/CHANGELOG.md` Unreleased) | `todo` | adopt each only with a fixture showing the need; first likely: input roles, verb vocabulary |
+
+### C · App · owner C-APP
+
+| # | Item | State | Next action |
+|---|---|---|---|
+| C-1 | PWA scaffold in `app/`, spec package wired in | `specified` [cp] | C-APP task 1 |
+| C-2 | Recipe list from fixtures | `specified` [cp] | C-APP task 2 |
+| C-3 | Recipe view: ingredients, tools, generated steps | `specified` [cp] | C-APP task 3 |
+| C-4 | Graph view of the DAG | `specified` [cp] | C-APP task 4 |
+| C-5 | Cooking mode: step-by-step, Wake Lock, timers, passive steps | `specified` [cp] | C-APP task 5 |
+| C-6 | Phone testing route (HTTPS) | `specified` [cp] | C-APP task 6; Vilhelm decides |
 
 ### B · Backlog — later workstreams (no owner yet)
 
@@ -53,8 +67,8 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 
 | # | Item | State | Next action |
 |---|---|---|---|
-| B-1 | Link import (schema.org JSON-LD → LLM → DAG); then screenshot, text | `todo` | after A-4 |
-| B-2 | Instruction generation + cooking mode (screen on, timers) | `todo` | after A-5 |
+| B-1 | Link import (schema.org JSON-LD → LLM → DAG); then screenshot, text | `todo` | ready to start (spec v0.1 exists); needs its own thread |
+| B-2 | Instruction generation + cooking mode (screen on, timers) | moved → C-3, C-5 | reference generator exists (`spec/validator/src/instructions.ts`) |
 | B-3 | Scaling (servings, constraint, discrete/non-linear) + unit and weight↔volume conversion | `todo` | after A-4 |
 | B-4 | Library: save, image, search, filters, ingredient-set search, reviews with photos | `todo` | after A-6 |
 | B-5 | Glossary tooltips, courses, kitchen/pantry inventory, shopping list | `todo` | later |
@@ -74,8 +88,10 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 | 2026-11-08 | Spec revisions are expected; each bumps version, is logged, ships a migration | taken (policy detail open: A-4) | `PROJECT-STATE.md` §4 | C-SETUP |
 | 2026-11-08 | Links are the first ingestion path | taken | `docs/DESIGN-BRIEF.md` §3c | C-SETUP |
 | 2026-11-08 | Platform priority phone > iPad > laptop | taken | `docs/DESIGN-BRIEF.md` §4 | C-SETUP |
-| 2026-11-08 | Platform: PWA vs React Native | open — no deadline | A-6 | C-ARCH |
-| 2026-11-08 | Spec language (JSON Schema vs TS types as source of truth) | open — no deadline | A-3 | C-ARCH |
+| 2026-11-08 | Platform: PWA, React + TypeScript | taken (Vilhelm) | A-6 | C-ARCH |
+| 2026-11-08 | Spec language: JSON Schema 2020-12 canonical, TS types generated, validator in TS | taken (Vilhelm) | `spec/README.md` | C-ARCH |
+| 2026-11-08 | Spec v0.1.0 model: bipartite material/operation DAG, tools separate, `after` edges, outputs + byproducts, split amounts, canonical units + source text | taken | `spec/README.md` §2–§9 | C-ARCH |
+| 2026-11-08 | Spec revision procedure (fixture first, bump, freeze, migrate, regenerate, log) | taken | `spec/VERSIONING.md` | C-ARCH |
 
 ---
 

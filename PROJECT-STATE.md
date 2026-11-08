@@ -23,23 +23,30 @@ Cooking from a recipe means reading, timing and improvising with occupied hands,
 
 ## 3 · What is established
 
-Nothing built yet. Direction and feature grouping: `docs/DESIGN-BRIEF.md`.
+- **Recipe DAG spec v0.1.0** — `spec/README.md` (normative), `spec/schema/recipe.schema.json`; 5 fixtures in `spec/fixtures/`.
+- **Validator + reference step generator** — `spec/validator/` (TypeScript, `npm test` green), including the "nothing implicit" acceptance test.
+- Prior art read and assessed — `docs/prior-art.md`: no existing format is a dependency graph.
+- Feature set and order of work — `docs/DESIGN-BRIEF.md`.
 
 ## 4 · Decisions taken
 
 - The recipe DAG is a **standalone, versioned spec with a validator**, not just the app's internal model.
 - The spec **will be revised** as needs emerge: every revision bumps its version, is logged, and ships a migration so existing recipe files stay valid.
 - Import from **links** is the first ingestion path.
+- Platform: **PWA, React + TypeScript**, phone first.
+- Spec source of truth: **JSON Schema 2020-12**; TS types generated from it.
 
 Full register: `LEDGER.md` §3.
 
 ## 5 · Order of work
 
-See `docs/DESIGN-BRIEF.md` §5. Now: schema spec + validator + fixtures, and the platform decision (thread C-ARCH).
+See `docs/DESIGN-BRIEF.md` §5. Spec v0.1 done (C-ARCH). Now: the PWA and cooking mode (thread C-APP). Next candidates: link import (B-1), a spec revision round (A-7).
 
 ## 6 · Known inconsistencies in the corpus
 
 *Where documents disagree, and which one wins until fixed.*
+
+None known (2026-11-08).
 
 ## 7 · Map of the folder
 
@@ -49,7 +56,9 @@ See `docs/DESIGN-BRIEF.md` §5. Now: schema spec + validator + fixtures, and the
 | `LEDGER.md`, `LEDGER-LOG.md` | state; history |
 | `ANSWERS.md` | append-only answers to open items |
 | `TODO*.md` | dated tasks |
-| `docs/` | design documents; `docs/DESIGN-BRIEF.md` is the feature set |
+| `docs/` | design documents; `docs/DESIGN-BRIEF.md` is the feature set, `docs/prior-art.md` |
+| `spec/` | the recipe DAG spec, schema, fixtures, validator (`spec/validator/`) |
+| `app/` | the PWA (from C-APP) |
 | `Continuation_Prompts/` | one hand-off prompt per thread; `OBSOLETE/` is not built on |
 
 ## 8 · Working conventions

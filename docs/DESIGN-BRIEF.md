@@ -21,7 +21,7 @@ Node kinds (first draft, to be settled by C-ARCH):
 
 Edges carry flow of material (and tool use). Independent branches = work that can run in parallel.
 
-### 2b · Questions the spec must answer (C-ARCH)
+### 2b · Questions the spec must answer (C-ARCH) — answered in `spec/README.md` §9
 
 1. Is the graph bipartite (material nodes ↔ operation nodes)?
 2. Are tool edges part of the DAG for acyclicity and consumption checks, or a separate relation? (A tool is reused across steps; it is not consumed.)
@@ -76,14 +76,15 @@ Help developing new recipes: DAG editor + LLM suggestions that preserve graph va
 
 ## 4 · Platform
 
-Phone first, then iPad, then laptop. Candidates: PWA (React + TypeScript, one codebase, Wake Lock available) vs React Native (better iOS offline/camera). Open decision — owned by C-ARCH.
+Phone first, then iPad, then laptop. **Decided 2026-11-08: PWA, React + TypeScript** (one codebase, Wake Lock for cooking mode). Known cost: weaker iOS offline storage and camera integration.
 
 ## 5 · Order of work (proposed)
 
-1. DAG schema spec + validator + fixtures (C-ARCH).
-2. Platform / stack decision (C-ARCH).
+1. DAG schema spec + validator + fixtures (C-ARCH) — done, `spec/`.
+2. Platform / stack decision (C-ARCH) — done, PWA.
+2b. PWA scaffold + cooking mode (C-APP).
 3. Link import → DAG.
-4. Instruction generation + cooking mode.
+4. Instruction generation + cooking mode — now part of 2b (C-APP).
 5. Scaling + unit conversion.
 6. Library, search, filters, reviews.
 7. Glossary, courses, inventory, shopping list.

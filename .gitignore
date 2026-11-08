@@ -4,3 +4,7 @@ Claude outputs/
 
 # Archives of folders that are also in the tree.
 *.zip
+
+# Node build output and dependencies (run npm install per workstation).
+node_modules/
+dist/

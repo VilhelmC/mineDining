@@ -1,0 +1,385 @@
+{
+	"schemaVersion": "0.1.0",
+	"id": "stir-fry-with-rice",
+	"meta": {
+		"title": "Chicken stir-fry with rice",
+		"servings": 4,
+		"course": "main",
+		"difficulty": "easy",
+		"tags": [
+			"fixture:parallel",
+			"fixture:multi-component"
+		]
+	},
+	"nodes": {
+		"rice": {
+			"kind": "ingredient",
+			"name": "jasmine rice",
+			"quantity": {
+				"value": 300,
+				"unit": "g"
+			}
+		},
+		"water": {
+			"kind": "ingredient",
+			"name": "water",
+			"quantity": {
+				"value": 450,
+				"unit": "mL"
+			}
+		},
+		"chicken": {
+			"kind": "ingredient",
+			"name": "chicken breast",
+			"quantity": {
+				"value": 400,
+				"unit": "g"
+			}
+		},
+		"garlic": {
+			"kind": "ingredient",
+			"name": "garlic",
+			"quantity": {
+				"value": 3,
+				"unit": "count",
+				"noun": "clove"
+			},
+			"scaling": {
+				"kind": "discrete",
+				"step": 1,
+				"min": 1
+			}
+		},
+		"ginger": {
+			"kind": "ingredient",
+			"name": "fresh ginger",
+			"quantity": {
+				"value": 15,
+				"unit": "g"
+			}
+		},
+		"bell-pepper": {
+			"kind": "ingredient",
+			"name": "red bell pepper",
+			"quantity": {
+				"value": 1,
+				"unit": "count"
+			},
+			"scaling": {
+				"kind": "discrete",
+				"step": 1,
+				"min": 1
+			}
+		},
+		"soy": {
+			"kind": "ingredient",
+			"name": "soy sauce",
+			"quantity": {
+				"value": 30,
+				"unit": "mL"
+			}
+		},
+		"oil": {
+			"kind": "ingredient",
+			"name": "neutral oil",
+			"quantity": {
+				"value": 30,
+				"unit": "mL"
+			}
+		},
+		"scallion": {
+			"kind": "ingredient",
+			"name": "scallion",
+			"quantity": {
+				"value": 2,
+				"unit": "count"
+			}
+		},
+		"sieve": {
+			"kind": "tool",
+			"name": "sieve"
+		},
+		"saucepan": {
+			"kind": "tool",
+			"name": "saucepan with lid"
+		},
+		"knife": {
+			"kind": "tool",
+			"name": "chef's knife"
+		},
+		"board": {
+			"kind": "tool",
+			"name": "cutting board"
+		},
+		"wok": {
+			"kind": "tool",
+			"name": "wok"
+		},
+		"rinse-rice": {
+			"kind": "operation",
+			"verb": "rinse",
+			"inputs": [
+				{
+					"ref": "rice"
+				}
+			],
+			"produces": [
+				"rinsed-rice"
+			],
+			"attention": "active",
+			"tools": [
+				"sieve"
+			],
+			"params": {
+				"until": "water runs clear"
+			}
+		},
+		"rinsed-rice": {
+			"kind": "intermediate",
+			"name": "rinsed rice"
+		},
+		"cook-rice": {
+			"kind": "operation",
+			"verb": "simmer",
+			"inputs": [
+				{
+					"ref": "rinsed-rice"
+				},
+				{
+					"ref": "water"
+				}
+			],
+			"produces": [
+				"cooked-rice"
+			],
+			"attention": "passive",
+			"tools": [
+				"saucepan"
+			],
+			"params": {
+				"duration": {
+					"value": 900,
+					"unit": "s"
+				},
+				"temperature": {
+					"heat": "low"
+				},
+				"until": "water absorbed"
+			},
+			"note": "Bring to a boil, cover, then lower the heat."
+		},
+		"cooked-rice": {
+			"kind": "intermediate",
+			"name": "cooked rice"
+		},
+		"slice-chicken": {
+			"kind": "operation",
+			"verb": "slice",
+			"inputs": [
+				{
+					"ref": "chicken"
+				}
+			],
+			"produces": [
+				"sliced-chicken"
+			],
+			"attention": "active",
+			"tools": [
+				"knife",
+				"board"
+			],
+			"note": "Thin strips."
+		},
+		"sliced-chicken": {
+			"kind": "intermediate",
+			"name": "sliced chicken"
+		},
+		"mince-garlic": {
+			"kind": "operation",
+			"verb": "mince",
+			"inputs": [
+				{
+					"ref": "garlic"
+				}
+			],
+			"produces": [
+				"minced-garlic"
+			],
+			"attention": "active",
+			"tools": [
+				"knife",
+				"board"
+			]
+		},
+		"minced-garlic": {
+			"kind": "intermediate",
+			"name": "minced garlic"
+		},
+		"grate-ginger": {
+			"kind": "operation",
+			"verb": "grate",
+			"inputs": [
+				{
+					"ref": "ginger"
+				}
+			],
+			"produces": [
+				"grated-ginger"
+			],
+			"attention": "active"
+		},
+		"grated-ginger": {
+			"kind": "intermediate",
+			"name": "grated ginger"
+		},
+		"slice-pepper": {
+			"kind": "operation",
+			"verb": "slice",
+			"inputs": [
+				{
+					"ref": "bell-pepper"
+				}
+			],
+			"produces": [
+				"sliced-pepper"
+			],
+			"attention": "active",
+			"tools": [
+				"knife",
+				"board"
+			]
+		},
+		"sliced-pepper": {
+			"kind": "intermediate",
+			"name": "sliced pepper"
+		},
+		"slice-scallion": {
+			"kind": "operation",
+			"verb": "slice",
+			"inputs": [
+				{
+					"ref": "scallion"
+				}
+			],
+			"produces": [
+				"sliced-scallion"
+			],
+			"attention": "active",
+			"tools": [
+				"knife",
+				"board"
+			]
+		},
+		"sliced-scallion": {
+			"kind": "intermediate",
+			"name": "sliced scallion"
+		},
+		"sear-chicken": {
+			"kind": "operation",
+			"verb": "stir-fry",
+			"inputs": [
+				{
+					"ref": "oil"
+				},
+				{
+					"ref": "sliced-chicken"
+				}
+			],
+			"produces": [
+				"seared-chicken"
+			],
+			"attention": "active",
+			"tools": [
+				"wok"
+			],
+			"params": {
+				"duration": {
+					"value": 240,
+					"unit": "s"
+				},
+				"temperature": {
+					"heat": "high"
+				},
+				"until": "no longer pink"
+			}
+		},
+		"seared-chicken": {
+			"kind": "intermediate",
+			"name": "seared chicken"
+		},
+		"add-aromatics": {
+			"kind": "operation",
+			"verb": "stir-fry",
+			"inputs": [
+				{
+					"ref": "seared-chicken"
+				},
+				{
+					"ref": "minced-garlic"
+				},
+				{
+					"ref": "grated-ginger"
+				},
+				{
+					"ref": "sliced-pepper"
+				}
+			],
+			"produces": [
+				"chicken-veg"
+			],
+			"attention": "active",
+			"tools": [
+				"wok"
+			],
+			"params": {
+				"duration": {
+					"value": 120,
+					"unit": "s"
+				},
+				"temperature": {
+					"heat": "high"
+				}
+			}
+		},
+		"chicken-veg": {
+			"kind": "intermediate",
+			"name": "chicken and vegetables"
+		},
+		"finish": {
+			"kind": "operation",
+			"verb": "toss",
+			"inputs": [
+				{
+					"ref": "chicken-veg"
+				},
+				{
+					"ref": "soy"
+				},
+				{
+					"ref": "sliced-scallion"
+				}
+			],
+			"produces": [
+				"stir-fry"
+			],
+			"attention": "active",
+			"tools": [
+				"wok"
+			],
+			"params": {
+				"duration": {
+					"value": 30,
+					"unit": "s"
+				}
+			}
+		},
+		"stir-fry": {
+			"kind": "intermediate",
+			"name": "stir-fry"
+		}
+	},
+	"outputs": [
+		"cooked-rice",
+		"stir-fry"
+	]
+}

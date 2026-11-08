@@ -18,6 +18,16 @@
 
 ---
 
+### 2026-11-08 · C-ARCH · Spec v0.1.0, validator, platform; commission closed
+[session](https://claude.ai/code/session_01WGDGhYqkmSvqNPDEVbbK8L)
+
+- **Wrote:** `docs/prior-art.md`; `spec/README.md`, `spec/VERSIONING.md`, `spec/CHANGELOG.md`, `spec/schema/recipe.schema.json`, `spec/schema/archive/recipe.schema.0.1.0.json`, `spec/fixtures/` (crepes, stir-fry-with-rice, lasagna, vinaigrette, meringues), `spec/validator/` (package.json, package-lock.json, tsconfig.json, src/validate.ts, src/instructions.ts, src/migrate.ts, src/cli.ts, src/index.ts, gen-schema.mjs, src/types.ts + src/schema.ts generated, test/fixtures.test.ts); `.gitignore` (node_modules, dist); `PROJECT-STATE.md` §3–§5, §7; `docs/DESIGN-BRIEF.md` §2b, §4, §5; `LEDGER.md`; `Continuation_Prompts/C-APP_pwa-cooking-mode.md`; `Continuation_Prompts/OBSOLETE/C-ARCH_schema-and-architecture.md`.
+- **Rows:** A-2..A-6 `done`; A-7 `todo` (revision candidates); C-1..C-6 `specified` [cp]; B-2 moved into C-3/C-5.
+- **Decisions:** taken — platform PWA React+TS (Vilhelm); spec language JSON Schema canonical + generated TS (Vilhelm); spec v0.1.0 model; revision procedure.
+- **Answers acted on:** none (answered in conversation).
+- **Prompts:** C-ARCH stamped on start (falsifier held), then superseded by C-APP — Vilhelm to delete `Continuation_Prompts/C-ARCH_schema-and-architecture.md`. C-APP written; cold-read 2026-11-08: 9 gaps, fixed (validator made browser-safe: `src/schema.ts` generated, `src/index.ts` entry, `exports`; Step gains params/produces/dependsOn; 24 tests green).
+- **Next:** Vilhelm commits; run `npm install` in `spec\validator` on Windows; open C-APP.
+
 ### 2026-11-08 · C-SETUP · Design brief, decisions, C-ARCH commissioned
 [session](https://claude.ai/code/session_01WGDGhYqkmSvqNPDEVbbK8L)
 

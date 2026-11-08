@@ -1,0 +1,502 @@
+{
+	"schemaVersion": "0.1.0",
+	"id": "lasagna",
+	"meta": {
+		"title": "Lasagna",
+		"servings": 6,
+		"course": "main",
+		"difficulty": "medium",
+		"tags": [
+			"fixture:shared-intermediate",
+			"fixture:non-scaling",
+			"fixture:after-edge"
+		]
+	},
+	"nodes": {
+		"beef": {
+			"kind": "ingredient",
+			"name": "minced beef",
+			"quantity": {
+				"value": 500,
+				"unit": "g"
+			}
+		},
+		"onion": {
+			"kind": "ingredient",
+			"name": "onion",
+			"quantity": {
+				"value": 1,
+				"unit": "count"
+			},
+			"scaling": {
+				"kind": "discrete",
+				"step": 1,
+				"min": 1
+			}
+		},
+		"garlic": {
+			"kind": "ingredient",
+			"name": "garlic",
+			"quantity": {
+				"value": 2,
+				"unit": "count",
+				"noun": "clove"
+			},
+			"scaling": {
+				"kind": "discrete",
+				"step": 1,
+				"min": 1
+			}
+		},
+		"tomatoes": {
+			"kind": "ingredient",
+			"name": "chopped tomatoes",
+			"quantity": {
+				"value": 1,
+				"unit": "count",
+				"noun": "can",
+				"each": {
+					"value": 400,
+					"unit": "g"
+				}
+			},
+			"state": "canned",
+			"scaling": {
+				"kind": "discrete",
+				"step": 1,
+				"min": 1
+			}
+		},
+		"olive-oil": {
+			"kind": "ingredient",
+			"name": "olive oil",
+			"quantity": {
+				"value": 15,
+				"unit": "mL"
+			}
+		},
+		"salt": {
+			"kind": "ingredient",
+			"name": "salt",
+			"quantity": {
+				"unquantified": "to-taste"
+			}
+		},
+		"butter": {
+			"kind": "ingredient",
+			"name": "butter",
+			"quantity": {
+				"value": 50,
+				"unit": "g"
+			}
+		},
+		"flour": {
+			"kind": "ingredient",
+			"name": "plain flour",
+			"quantity": {
+				"value": 50,
+				"unit": "g"
+			}
+		},
+		"milk": {
+			"kind": "ingredient",
+			"name": "milk",
+			"quantity": {
+				"value": 600,
+				"unit": "mL"
+			}
+		},
+		"nutmeg": {
+			"kind": "ingredient",
+			"name": "ground nutmeg",
+			"quantity": {
+				"unquantified": "to-taste"
+			}
+		},
+		"pasta": {
+			"kind": "ingredient",
+			"name": "dried lasagna sheets",
+			"quantity": {
+				"value": 12,
+				"unit": "count",
+				"noun": "sheet"
+			}
+		},
+		"parmesan": {
+			"kind": "ingredient",
+			"name": "grated parmesan",
+			"quantity": {
+				"value": 60,
+				"unit": "g"
+			}
+		},
+		"oven": {
+			"kind": "tool",
+			"name": "oven"
+		},
+		"knife": {
+			"kind": "tool",
+			"name": "chef's knife"
+		},
+		"board": {
+			"kind": "tool",
+			"name": "cutting board"
+		},
+		"pan": {
+			"kind": "tool",
+			"name": "frying pan"
+		},
+		"saucepan": {
+			"kind": "tool",
+			"name": "saucepan"
+		},
+		"whisk": {
+			"kind": "tool",
+			"name": "whisk"
+		},
+		"dish": {
+			"kind": "tool",
+			"name": "baking dish",
+			"size": "20 × 30 cm",
+			"scaling": {
+				"kind": "heuristic",
+				"note": "Scale dish area with servings; keep layer depth."
+			}
+		},
+		"preheat-oven": {
+			"kind": "operation",
+			"verb": "preheat",
+			"inputs": [],
+			"produces": [],
+			"attention": "passive",
+			"tools": [
+				"oven"
+			],
+			"params": {
+				"temperature": {
+					"value": 180,
+					"unit": "C"
+				}
+			}
+		},
+		"chop-onion": {
+			"kind": "operation",
+			"verb": "chop",
+			"inputs": [
+				{
+					"ref": "onion"
+				}
+			],
+			"produces": [
+				"chopped-onion"
+			],
+			"attention": "active",
+			"tools": [
+				"knife",
+				"board"
+			],
+			"note": "Finely."
+		},
+		"chopped-onion": {
+			"kind": "intermediate",
+			"name": "chopped onion"
+		},
+		"mince-garlic": {
+			"kind": "operation",
+			"verb": "mince",
+			"inputs": [
+				{
+					"ref": "garlic"
+				}
+			],
+			"produces": [
+				"minced-garlic"
+			],
+			"attention": "active",
+			"tools": [
+				"knife",
+				"board"
+			]
+		},
+		"minced-garlic": {
+			"kind": "intermediate",
+			"name": "minced garlic"
+		},
+		"brown-beef": {
+			"kind": "operation",
+			"verb": "brown",
+			"inputs": [
+				{
+					"ref": "olive-oil"
+				},
+				{
+					"ref": "beef"
+				}
+			],
+			"produces": [
+				"browned-beef"
+			],
+			"attention": "active",
+			"tools": [
+				"pan"
+			],
+			"params": {
+				"temperature": {
+					"heat": "medium-high"
+				},
+				"until": "no pink remains"
+			}
+		},
+		"browned-beef": {
+			"kind": "intermediate",
+			"name": "browned beef"
+		},
+		"soften": {
+			"kind": "operation",
+			"verb": "saute",
+			"inputs": [
+				{
+					"ref": "browned-beef"
+				},
+				{
+					"ref": "chopped-onion"
+				},
+				{
+					"ref": "minced-garlic"
+				}
+			],
+			"produces": [
+				"ragu-base"
+			],
+			"attention": "active",
+			"tools": [
+				"pan"
+			],
+			"params": {
+				"duration": {
+					"value": 300,
+					"unit": "s"
+				},
+				"temperature": {
+					"heat": "medium"
+				},
+				"until": "onion soft"
+			}
+		},
+		"ragu-base": {
+			"kind": "intermediate",
+			"name": "ragù base"
+		},
+		"simmer-ragu": {
+			"kind": "operation",
+			"verb": "simmer",
+			"inputs": [
+				{
+					"ref": "ragu-base"
+				},
+				{
+					"ref": "tomatoes"
+				},
+				{
+					"ref": "salt"
+				}
+			],
+			"produces": [
+				"ragu"
+			],
+			"attention": "passive",
+			"tools": [
+				"pan"
+			],
+			"params": {
+				"duration": {
+					"value": 1800,
+					"unit": "s"
+				},
+				"temperature": {
+					"heat": "low"
+				},
+				"until": "thick"
+			}
+		},
+		"ragu": {
+			"kind": "intermediate",
+			"name": "ragù"
+		},
+		"make-roux": {
+			"kind": "operation",
+			"verb": "cook",
+			"inputs": [
+				{
+					"ref": "butter"
+				},
+				{
+					"ref": "flour"
+				}
+			],
+			"produces": [
+				"roux"
+			],
+			"attention": "active",
+			"tools": [
+				"saucepan"
+			],
+			"params": {
+				"duration": {
+					"value": 120,
+					"unit": "s"
+				},
+				"temperature": {
+					"heat": "medium"
+				}
+			}
+		},
+		"roux": {
+			"kind": "intermediate",
+			"name": "roux",
+			"glossary": [
+				"roux"
+			]
+		},
+		"make-bechamel": {
+			"kind": "operation",
+			"verb": "whisk",
+			"inputs": [
+				{
+					"ref": "roux"
+				},
+				{
+					"ref": "milk"
+				},
+				{
+					"ref": "nutmeg"
+				}
+			],
+			"produces": [
+				"bechamel"
+			],
+			"attention": "active",
+			"tools": [
+				"saucepan",
+				"whisk"
+			],
+			"params": {
+				"temperature": {
+					"heat": "medium"
+				},
+				"until": "thick enough to coat a spoon"
+			},
+			"note": "Add the milk gradually."
+		},
+		"bechamel": {
+			"kind": "intermediate",
+			"name": "béchamel",
+			"yield": {
+				"value": 650,
+				"unit": "mL"
+			},
+			"glossary": [
+				"bechamel"
+			]
+		},
+		"assemble": {
+			"kind": "operation",
+			"verb": "layer",
+			"inputs": [
+				{
+					"ref": "ragu"
+				},
+				{
+					"ref": "pasta"
+				},
+				{
+					"ref": "bechamel",
+					"amount": {
+						"fraction": 0.67
+					}
+				}
+			],
+			"produces": [
+				"assembled"
+			],
+			"attention": "active",
+			"tools": [
+				"dish"
+			],
+			"note": "Alternate ragù, sheets and béchamel; finish with a layer of sheets."
+		},
+		"assembled": {
+			"kind": "intermediate",
+			"name": "assembled lasagna"
+		},
+		"top": {
+			"kind": "operation",
+			"verb": "top",
+			"inputs": [
+				{
+					"ref": "assembled"
+				},
+				{
+					"ref": "bechamel",
+					"amount": "rest"
+				},
+				{
+					"ref": "parmesan"
+				}
+			],
+			"produces": [
+				"topped"
+			],
+			"attention": "active",
+			"tools": [
+				"dish"
+			]
+		},
+		"topped": {
+			"kind": "intermediate",
+			"name": "topped lasagna"
+		},
+		"bake": {
+			"kind": "operation",
+			"verb": "bake",
+			"inputs": [
+				{
+					"ref": "topped"
+				}
+			],
+			"produces": [
+				"lasagna"
+			],
+			"attention": "passive",
+			"tools": [
+				"oven",
+				"dish"
+			],
+			"after": [
+				"preheat-oven"
+			],
+			"params": {
+				"duration": {
+					"value": 2400,
+					"unit": "s",
+					"scaling": {
+						"kind": "heuristic",
+						"note": "Depends on depth, not mass; bake until bubbling."
+					}
+				},
+				"temperature": {
+					"value": 180,
+					"unit": "C"
+				},
+				"until": "golden and bubbling"
+			}
+		},
+		"lasagna": {
+			"kind": "intermediate",
+			"name": "lasagna"
+		}
+	},
+	"outputs": [
+		"lasagna"
+	]
+}

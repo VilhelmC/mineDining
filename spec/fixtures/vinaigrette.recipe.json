@@ -1,0 +1,189 @@
+{
+	"schemaVersion": "0.1.0",
+	"id": "vinaigrette",
+	"meta": {
+		"title": "Mustard vinaigrette",
+		"servings": 4,
+		"course": "dressing",
+		"difficulty": "easy",
+		"tags": [
+			"fixture:unquantified",
+			"fixture:optional"
+		]
+	},
+	"nodes": {
+		"oil": {
+			"kind": "ingredient",
+			"name": "olive oil",
+			"quantity": {
+				"value": 90,
+				"unit": "mL",
+				"source": {
+					"text": "6 tbsp"
+				}
+			}
+		},
+		"vinegar": {
+			"kind": "ingredient",
+			"name": "red wine vinegar",
+			"quantity": {
+				"value": 30,
+				"unit": "mL",
+				"source": {
+					"text": "2 tbsp"
+				}
+			}
+		},
+		"mustard": {
+			"kind": "ingredient",
+			"name": "Dijon mustard",
+			"quantity": {
+				"value": 5,
+				"unit": "g",
+				"source": {
+					"text": "1 tsp"
+				}
+			}
+		},
+		"salt": {
+			"kind": "ingredient",
+			"name": "salt",
+			"quantity": {
+				"unquantified": "to-taste"
+			}
+		},
+		"pepper": {
+			"kind": "ingredient",
+			"name": "black pepper",
+			"quantity": {
+				"unquantified": "to-taste"
+			}
+		},
+		"chives": {
+			"kind": "ingredient",
+			"name": "chives",
+			"quantity": {
+				"value": 5,
+				"unit": "g"
+			},
+			"state": "fresh",
+			"optional": true
+		},
+		"bowl": {
+			"kind": "tool",
+			"name": "small bowl"
+		},
+		"whisk": {
+			"kind": "tool",
+			"name": "whisk"
+		},
+		"knife": {
+			"kind": "tool",
+			"name": "knife"
+		},
+		"chop-chives": {
+			"kind": "operation",
+			"verb": "chop",
+			"inputs": [
+				{
+					"ref": "chives"
+				}
+			],
+			"produces": [
+				"chopped-chives"
+			],
+			"attention": "active",
+			"tools": [
+				"knife"
+			]
+		},
+		"chopped-chives": {
+			"kind": "intermediate",
+			"name": "chopped chives"
+		},
+		"whisk-base": {
+			"kind": "operation",
+			"verb": "whisk",
+			"inputs": [
+				{
+					"ref": "vinegar"
+				},
+				{
+					"ref": "mustard"
+				},
+				{
+					"ref": "salt"
+				},
+				{
+					"ref": "pepper"
+				}
+			],
+			"produces": [
+				"base"
+			],
+			"attention": "active",
+			"tools": [
+				"bowl",
+				"whisk"
+			]
+		},
+		"base": {
+			"kind": "intermediate",
+			"name": "vinegar base"
+		},
+		"emulsify": {
+			"kind": "operation",
+			"verb": "emulsify",
+			"inputs": [
+				{
+					"ref": "base"
+				},
+				{
+					"ref": "oil"
+				}
+			],
+			"produces": [
+				"emulsion"
+			],
+			"attention": "active",
+			"tools": [
+				"bowl",
+				"whisk"
+			],
+			"params": {
+				"until": "thick and emulsified"
+			},
+			"note": "Drizzle the oil in while whisking."
+		},
+		"emulsion": {
+			"kind": "intermediate",
+			"name": "emulsified dressing"
+		},
+		"finish": {
+			"kind": "operation",
+			"verb": "stir",
+			"inputs": [
+				{
+					"ref": "emulsion"
+				},
+				{
+					"ref": "chopped-chives"
+				}
+			],
+			"produces": [
+				"vinaigrette"
+			],
+			"attention": "active",
+			"tools": [
+				"whisk"
+			]
+		},
+		"vinaigrette": {
+			"kind": "intermediate",
+			"name": "vinaigrette"
+		}
+	},
+	"outputs": [
+		"vinaigrette"
+	]
+}

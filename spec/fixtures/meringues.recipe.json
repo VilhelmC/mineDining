@@ -1,0 +1,291 @@
+{
+	"schemaVersion": "0.1.0",
+	"id": "meringues",
+	"meta": {
+		"title": "Meringues",
+		"servings": 8,
+		"course": "dessert",
+		"difficulty": "medium",
+		"tags": [
+			"fixture:multi-output",
+			"fixture:byproduct",
+			"fixture:after-edge"
+		]
+	},
+	"nodes": {
+		"egg": {
+			"kind": "ingredient",
+			"name": "egg",
+			"quantity": {
+				"value": 4,
+				"unit": "count"
+			},
+			"scaling": {
+				"kind": "discrete",
+				"step": 1,
+				"min": 1
+			},
+			"state": "room temperature"
+		},
+		"sugar": {
+			"kind": "ingredient",
+			"name": "caster sugar",
+			"quantity": {
+				"value": 200,
+				"unit": "g"
+			}
+		},
+		"cornflour": {
+			"kind": "ingredient",
+			"name": "cornflour",
+			"quantity": {
+				"value": 5,
+				"unit": "g"
+			}
+		},
+		"vinegar": {
+			"kind": "ingredient",
+			"name": "white wine vinegar",
+			"quantity": {
+				"value": 5,
+				"unit": "mL"
+			}
+		},
+		"oven": {
+			"kind": "tool",
+			"name": "oven"
+		},
+		"bowl": {
+			"kind": "tool",
+			"name": "large clean bowl"
+		},
+		"small-bowl": {
+			"kind": "tool",
+			"name": "small bowl"
+		},
+		"mixer": {
+			"kind": "tool",
+			"name": "electric mixer"
+		},
+		"spatula": {
+			"kind": "tool",
+			"name": "spatula"
+		},
+		"tray": {
+			"kind": "tool",
+			"name": "baking tray lined with parchment"
+		},
+		"preheat-oven": {
+			"kind": "operation",
+			"verb": "preheat",
+			"inputs": [],
+			"produces": [],
+			"attention": "passive",
+			"tools": [
+				"oven"
+			],
+			"params": {
+				"temperature": {
+					"value": 120,
+					"unit": "C"
+				}
+			}
+		},
+		"separate-eggs": {
+			"kind": "operation",
+			"verb": "separate",
+			"inputs": [
+				{
+					"ref": "egg"
+				}
+			],
+			"produces": [
+				"egg-whites",
+				"egg-yolks"
+			],
+			"attention": "active",
+			"tools": [
+				"bowl",
+				"small-bowl"
+			]
+		},
+		"egg-whites": {
+			"kind": "intermediate",
+			"name": "egg whites"
+		},
+		"egg-yolks": {
+			"kind": "intermediate",
+			"name": "egg yolks",
+			"note": "Not used here; keep for custard or mayonnaise."
+		},
+		"whisk-whites": {
+			"kind": "operation",
+			"verb": "whisk",
+			"inputs": [
+				{
+					"ref": "egg-whites"
+				}
+			],
+			"produces": [
+				"soft-peaks"
+			],
+			"attention": "active",
+			"tools": [
+				"bowl",
+				"mixer"
+			],
+			"params": {
+				"until": "soft peaks"
+			}
+		},
+		"soft-peaks": {
+			"kind": "intermediate",
+			"name": "whites at soft peaks"
+		},
+		"add-sugar": {
+			"kind": "operation",
+			"verb": "whisk",
+			"inputs": [
+				{
+					"ref": "soft-peaks"
+				},
+				{
+					"ref": "sugar"
+				}
+			],
+			"produces": [
+				"stiff-meringue"
+			],
+			"attention": "active",
+			"tools": [
+				"bowl",
+				"mixer"
+			],
+			"params": {
+				"until": "stiff and glossy"
+			},
+			"note": "Add the sugar a spoonful at a time."
+		},
+		"stiff-meringue": {
+			"kind": "intermediate",
+			"name": "stiff meringue"
+		},
+		"fold": {
+			"kind": "operation",
+			"verb": "fold",
+			"inputs": [
+				{
+					"ref": "stiff-meringue"
+				},
+				{
+					"ref": "cornflour"
+				},
+				{
+					"ref": "vinegar"
+				}
+			],
+			"produces": [
+				"meringue-mix"
+			],
+			"attention": "active",
+			"tools": [
+				"spatula"
+			]
+		},
+		"meringue-mix": {
+			"kind": "intermediate",
+			"name": "meringue mixture"
+		},
+		"shape": {
+			"kind": "operation",
+			"verb": "spoon",
+			"inputs": [
+				{
+					"ref": "meringue-mix"
+				}
+			],
+			"produces": [
+				"shaped"
+			],
+			"attention": "active",
+			"tools": [
+				"tray"
+			],
+			"note": "8 mounds."
+		},
+		"shaped": {
+			"kind": "intermediate",
+			"name": "shaped meringues"
+		},
+		"bake": {
+			"kind": "operation",
+			"verb": "bake",
+			"inputs": [
+				{
+					"ref": "shaped"
+				}
+			],
+			"produces": [
+				"baked"
+			],
+			"attention": "passive",
+			"tools": [
+				"oven",
+				"tray"
+			],
+			"after": [
+				"preheat-oven"
+			],
+			"params": {
+				"duration": {
+					"value": 3600,
+					"unit": "s",
+					"scaling": {
+						"kind": "fixed"
+					}
+				},
+				"temperature": {
+					"value": 120,
+					"unit": "C"
+				}
+			}
+		},
+		"baked": {
+			"kind": "intermediate",
+			"name": "baked meringues"
+		},
+		"cool": {
+			"kind": "operation",
+			"verb": "cool",
+			"inputs": [
+				{
+					"ref": "baked"
+				}
+			],
+			"produces": [
+				"meringues"
+			],
+			"attention": "passive",
+			"tools": [
+				"oven"
+			],
+			"params": {
+				"duration": {
+					"value": 3600,
+					"unit": "s"
+				}
+			},
+			"note": "Oven off, door ajar."
+		},
+		"meringues": {
+			"kind": "intermediate",
+			"name": "meringues"
+		}
+	},
+	"outputs": [
+		"meringues"
+	],
+	"byproducts": [
+		"egg-yolks"
+	]
+}
