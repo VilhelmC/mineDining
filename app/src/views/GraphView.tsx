@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { ReactFlow, Background, Controls, MarkerType, Position, type Edge, type Node as FlowNode } from "@xyflow/react";
+import { ReactFlow, Background, Controls, MarkerType, Position, getNodesBounds, type Edge, type Node as FlowNode, type ReactFlowInstance } from "@xyflow/react";
 import { Graph, layout } from "@dagrejs/dagre";
 import "@xyflow/react/dist/style.css";
 import type { Node, Operation, Recipe } from "@minedining/recipe-spec";
@@ -10,6 +10,8 @@ import { durationText } from "../format";
 
 const W = 170;
 const H = 64;
+/** Below this zoom the 12 px node labels are unreadable on a phone. */
+const READABLE = 0.75;
 
 /** Material/operation DAG, laid out left to right. Tools are shown inside their operation (spec §9 q2: not DAG edges). */
 export function buildGraph(r: Recipe): { nodes: FlowNode[]; edges: Edge[] } {
@@ -68,6 +70,18 @@ function Label({ n, r }: { n: Node; r: Recipe }) {
 export function GraphView({ loaded }: { loaded: Loaded }) {
 	const r = loaded.recipe!;
 	const { nodes, edges } = useMemo(() => buildGraph(r), [r]);
+	// Fit the whole graph when it is readable at that zoom (laptop, iPad);
+	// otherwise (portrait phone) open at a readable zoom on the first column, centred vertically.
+	const onInit = (rf: ReactFlowInstance) => {
+		const el = document.querySelector(".graph");
+		if (!el) return;
+		const { width, height } = el.getBoundingClientRect();
+		const b = getNodesBounds(nodes);
+		const fit = Math.min(width / (b.width + 32), height / (b.height + 32));
+		if (fit >= READABLE) return void rf.fitView({ padding: 0.05 });
+		const zoom = READABLE;
+		void rf.setViewport({ x: 16 - b.x * zoom, y: height / 2 - (b.y + b.height / 2) * zoom, zoom });
+	};
 	return (
 		<div className="graph-page">
 			<header className="cook-bar">
@@ -76,7 +90,7 @@ export function GraphView({ loaded }: { loaded: Loaded }) {
 				<span className="legend"><i className="lg-ing" />ingredient <i className="lg-int" />intermediate <i className="lg-act" />active <i className="lg-pas" />passive</span>
 			</header>
 			<div className="graph">
-				<ReactFlow nodes={nodes} edges={edges} fitView minZoom={0.2} nodesDraggable={false} nodesConnectable={false} proOptions={{ hideAttribution: false }}>
+				<ReactFlow nodes={nodes} edges={edges} onInit={onInit} minZoom={0.2} nodesDraggable={false} nodesConnectable={false} proOptions={{ hideAttribution: false }}>
 					<Background />
 					<Controls showInteractive={false} />
 				</ReactFlow>

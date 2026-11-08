@@ -18,6 +18,16 @@
 
 ---
 
+### 2026-11-08 · C-APP · Phone route decided; graph readable on phone
+[session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
+
+- **Wrote:** `app/src/views/GraphView.tsx` (initial viewport); `app/README.md` (first install after workspace switch); `LEDGER.md` C-4, C-6, §3; `Continuation_Prompts/C-APP_pwa-cooking-mode.md`.
+- **Rows:** C-4 `done`; C-6 `active` (on Vilhelm: enable Pages, run workflow).
+- **Decisions:** taken — phone route GitHub Pages; test phone Android + Chrome (Vilhelm).
+- **Answers acted on:** none (answered in conversation).
+- **Prompts:** C-APP updated, swept; falsifier still true. Pages build checked at `/mineDining/` (manifest 200, service worker registers, no console errors).
+- **Next:** Vilhelm deploys to Pages and cooks one fixture on his phone (C-5).
+
 ### 2026-11-08 · C-APP · PWA scaffold, views, cooking mode
 [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
 

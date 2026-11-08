@@ -10,6 +10,7 @@
 NAME THIS CONVERSATION: C-APP · PWA scaffold + cooking mode
 
 PROMPT STATUS. Written 2026-11-08 · thread C-APP · purpose: CONTINUE
+UPDATED 2026-11-08 · C-APP · https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr — C-6 route decided (Pages, Android Chrome); C-4 done.
 UPDATED 2026-11-08 · C-APP · https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr — C-1..C-3 done, C-4/C-5 drafted, C-6 proposed; tasks rewritten.
 Last verified 2026-11-08 by C-APP.
 FALSIFIER: "LEDGER.md row C-5 (cooking mode) is not in state `done`." If false,
@@ -28,16 +29,19 @@ WHAT EXISTS (paths relative to the project root):
   - app/ — Vite + React + TS PWA (vite-plugin-pwa, manifest, icons). See
     app/README.md for layout, commands and the settled cooking-mode rules.
     Views: recipe list (bundled spec/fixtures through migrate+validate),
-    recipe view, graph view (React Flow + dagre, lazy), cooking mode.
+    recipe view, graph view (React Flow + dagre, lazy; opens readable on
+    a phone), cooking mode.
     app/src/cook/scheduler.ts is the live scheduler (pure, vitest-tested
     over every fixture). Built and checked in a phone-sized headless browser
     only — never on a real phone.
-  - .github/workflows/pages.yml — Pages deploy, manual trigger only;
-    Pages is not enabled in the repo settings yet.
+  - .github/workflows/pages.yml — Pages deploy, manual trigger only,
+    builds with BASE=/mineDining/ (checked: paths, manifest, service
+    worker). Route decided (LEDGER §3); whether Vilhelm has enabled Pages
+    and run it: ask, or open the URL. Test phone: Android + Chrome.
 
 READ FIRST, in order:
-  1. LEDGER.md workstream C and §3 — row states; the open C-6 decision.
-  2. ANSWERS.md — entries tagged C-6 (route, phone OS).
+  1. LEDGER.md workstream C and §3 — row states and decisions.
+  2. ANSWERS.md — entries tagged C-5 or C-6 (phone test results).
   3. app/README.md — what the app is and how cooking mode behaves.
   4. app/src/cook/scheduler.ts header comment — the scheduling rules.
   5. spec/README.md §4, §11 only if touching steps or the spec.
@@ -51,18 +55,18 @@ JSON Schema canonical; recipes load through validate()/migrate(); nothing
 implicit; npm workspaces; React Flow + dagre; cooking-mode timer/alert rules.
 
 OPEN TASKS, in order:
-  1. C-6 Act on Vilhelm's route decision (proposed: GitHub Pages via
-     .github/workflows/pages.yml, URL https://vilhelmc.github.io/mineDining/).
-     Get his phone OS + version; check Wake Lock in the installed
-     (home-screen) PWA there — reportedly unreliable on older iOS; unverified.
+  1. C-6 Pages live at https://vilhelmc.github.io/mineDining/ (Vilhelm
+     enables Pages, Source: GitHub Actions, runs the workflow; a private
+     repo needs a paid GitHub plan for Pages). Install to home screen on
+     the Android phone; row → `done` when it opens there.
   2. C-5 Cook-through of one fixture on his phone: wake lock held, alerts
      (sound, vibration, notification when hidden), resume after lock/reload.
      Fix what fails; row → `done` when he confirms.
-  3. C-4 Phone readability: the fitted graph is too small on a portrait
-     phone. Proposal: open at a readable zoom on the first column.
-  4. Bundle: the main chunk is ~400 kB (Ajv compiles the schema at runtime).
+  3. Bundle: the main chunk is ~400 kB (Ajv compiles the schema at runtime).
      Optional: precompile the validator (Ajv standalone) if load time hurts.
   Order reason: C-5 is the goal and needs C-6 to be tested at all.
+  After C-5: the spec revision round (A-7, input roles for better step
+  prose) or link import (B-1) — ask Vilhelm; both need their own thread.
 
 CONSTRAINTS:
   - Code indentation uses tabs, not spaces (YAML excepted).
@@ -100,3 +104,4 @@ Supersedes the C-ARCH prompt, whose commission (spec v0.1 + platform decision) i
 |---|---|---|---|
 | 2026-11-08 | C-ARCH | [session](https://claude.ai/code/session_01WGDGhYqkmSvqNPDEVbbK8L) | Written; supersedes `C-ARCH_schema-and-architecture.md`. Cold-read: 9 gaps, fixed — validator made browser-safe with a package entry (was blocked on `node:fs`); Step gains params/produces/dependsOn; C-APP may change validator code; cooking-mode questions listed; C-4 criteria; C-6 as open decision; stale ledger/brief text corrected. |
 | 2026-11-08 | C-APP | [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr) | Cold-read on start: 2 gaps, fixed — npm install on the device mount times out (constraint added); spec README tooling stale once the root became a workspace (§12 updated). Then C-1..C-3 done, C-4/C-5 drafted, C-6 proposed; purpose → CONTINUE; WHAT EXISTS, READ FIRST, tasks rewritten. Falsifier unchanged, still true. |
+| 2026-11-08 | C-APP | [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr) | C-6 route + phone decided; C-4 done; WHAT EXISTS, READ FIRST, tasks swept. Falsifier still true. |
