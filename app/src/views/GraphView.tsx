@@ -8,12 +8,12 @@ import type { Loaded } from "../recipes";
 import { href } from "../router";
 import { durationText } from "../format";
 
-const W = 170;
+const W = 156;
 const H = 64;
-/** Below this zoom the 12 px node labels are unreadable on a phone. */
-const READABLE = 1;
+/** Below this zoom the 13 px node labels are unreadable on a phone; wider graphs pan sideways. */
+const MIN_ZOOM = 0.7;
 
-/** Material/operation DAG, laid out left to right. Tools are shown inside their operation (spec §9 q2: not DAG edges). */
+/** Material/operation DAG, laid out top to bottom (topological order reads downward and scrolls like a page). Tools are shown inside their operation (spec §9 q2: not DAG edges). */
 export function buildGraph(r: Recipe): { nodes: FlowNode[]; edges: Edge[] } {
 	const all = Object.entries(r.nodes) as [string, Node][];
 	const shown = all.filter(([, n]) => n.kind !== "tool");
@@ -26,7 +26,7 @@ export function buildGraph(r: Recipe): { nodes: FlowNode[]; edges: Edge[] } {
 		for (const a of op.after ?? []) edges.push({ id: `${a}~>${id}`, source: a, target: id, style: { strokeDasharray: "5 4" } });
 	}
 	const g = new Graph();
-	g.setGraph({ rankdir: "LR", nodesep: 18, ranksep: 46 });
+	g.setGraph({ rankdir: "TB", nodesep: 14, ranksep: 34 });
 	g.setDefaultEdgeLabel(() => ({}));
 	for (const [id] of shown) g.setNode(id, { width: W, height: H });
 	for (const e of edges) g.setEdge(e.source, e.target);
@@ -39,8 +39,8 @@ export function buildGraph(r: Recipe): { nodes: FlowNode[]; edges: Edge[] } {
 			id,
 			position: { x: p.x - W / 2, y: p.y - H / 2 },
 			data: { label: <Label n={n} r={r} /> },
-			sourcePosition: Position.Right,
-			targetPosition: Position.Left,
+			sourcePosition: Position.Bottom,
+			targetPosition: Position.Top,
 			className: `gn gn-${n.kind}${n.kind === "operation" ? ` gn-${(n as Operation).attention}` : ""}${outputs.has(id) ? " gn-output" : ""}`,
 			style: { width: W },
 			draggable: false,
@@ -70,17 +70,16 @@ function Label({ n, r }: { n: Node; r: Recipe }) {
 export function GraphView({ loaded }: { loaded: Loaded }) {
 	const r = loaded.recipe!;
 	const { nodes, edges } = useMemo(() => buildGraph(r), [r]);
-	// Fit the whole graph when it is readable at that zoom (laptop, iPad);
-	// otherwise (portrait phone) open at a readable zoom on the first column, centred vertically.
+	// Open at the top, fitted to the width but never below a readable zoom;
+	// the rest is reached by scrolling down (wheel/trackpad or a one-finger drag).
 	const onInit = (rf: ReactFlowInstance) => {
 		const el = document.querySelector(".graph");
 		if (!el) return;
-		const { width, height } = el.getBoundingClientRect();
+		const { width } = el.getBoundingClientRect();
 		const b = getNodesBounds(nodes);
-		const fit = Math.min(width / (b.width + 32), height / (b.height + 32));
-		if (fit >= READABLE) return void rf.fitView({ padding: 0.05 });
-		const zoom = READABLE;
-		void rf.setViewport({ x: 16 - b.x * zoom, y: height / 2 - (b.y + b.height / 2) * zoom, zoom });
+		const zoom = Math.max(MIN_ZOOM, Math.min(1, (width - 32) / b.width));
+		const x = b.width * zoom <= width - 32 ? (width - b.width * zoom) / 2 - b.x * zoom : 16 - b.x * zoom;
+		void rf.setViewport({ x, y: 16 - b.y * zoom, zoom });
 	};
 	return (
 		<div className="graph-page">
@@ -90,7 +89,7 @@ export function GraphView({ loaded }: { loaded: Loaded }) {
 				<span className="legend"><i className="lg-ing" />ingredient <i className="lg-int" />intermediate <i className="lg-act" />active <i className="lg-pas" />passive</span>
 			</header>
 			<div className="graph">
-				<ReactFlow nodes={nodes} edges={edges} onInit={onInit} colorMode="system" minZoom={0.2} nodesDraggable={false} nodesConnectable={false} proOptions={{ hideAttribution: false }}>
+				<ReactFlow nodes={nodes} edges={edges} onInit={onInit} colorMode="system" minZoom={0.2} panOnScroll zoomOnScroll={false} zoomOnPinch nodesDraggable={false} nodesConnectable={false} proOptions={{ hideAttribution: false }}>
 					<Background />
 					<Controls showInteractive={false} />
 				</ReactFlow>

@@ -18,6 +18,16 @@
 
 ---
 
+### 2026-11-08 · C-APP · Graph layout vertical
+[session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
+
+- **Wrote:** `app/src/views/GraphView.tsx`; `LEDGER.md` C-4, §3; prompt.
+- **Rows:** C-4 `done` (layout changed).
+- **Decisions:** taken — vertical graph layout (Vilhelm).
+- **Answers acted on:** none.
+- **Prompts:** C-APP swept; falsifier still true. Checked at phone size, dark mode: opens at top, wheel scrolls, no errors.
+- **Next:** Vilhelm pushes; re-test deployed site in Chrome.
+
 ### 2026-11-08 · C-APP · Browser test round 1: fixes; auto-deploy
 [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
 
