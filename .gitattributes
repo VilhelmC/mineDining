@@ -1,0 +1,15 @@
+# Append-only files merge by union: two machines writing the same day both survive.
+# Do NOT extend this to LEDGER.md — its rows are edited in place, and union on an
+# edited row keeps both versions of it, silently.
+LEDGER-LOG.md merge=union
+ANSWERS.md merge=union
+
+# Hunk headers name the nearest heading.
+*.md diff=markdown
+
+# One line-ending convention, decided here rather than per machine.
+* text=auto eol=crlf
+*.png binary
+*.jpg binary
+*.pdf binary
+*.zip binary

@@ -1,0 +1,6 @@
+# Scratch drop for things handed over from a Claude session. Whatever is worth
+# keeping gets moved to its real home and committed from there.
+Claude outputs/
+
+# Archives of folders that are also in the tree.
+*.zip
