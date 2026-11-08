@@ -231,3 +231,18 @@ button { font: inherit; color: inherit; }
 .react-flow__node.gn.st-done { opacity: 0.45; }
 .react-flow__node.gn.st-current { outline: 3px solid var(--accent); outline-offset: 2px; }
 .react-flow__node.gn.st-running { background: color-mix(in srgb, var(--passive) 25%, var(--gn-int)); }
+
+/* Tools as chips joined to their steps by curves */
+.btable-inner { position: relative; }
+.tool-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 26px; }
+.tool-chip { font: inherit; font-size: 0.82rem; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--fg); cursor: pointer; }
+.tool-chip.on { border-color: var(--accent); background: var(--accent); color: var(--accent-fg); }
+.tool-chip.hot { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.tool-chip.on.hot { color: var(--accent-fg); }
+.splines { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; }
+.splines.under { z-index: 0; }
+.btable-inner .btable, .tool-chips { position: relative; z-index: 1; }
+.bt-op.tool-target { outline: 3px solid var(--accent); outline-offset: 1px; }
+.bt-prep.tool-target { color: var(--accent); font-weight: 600; }
+.spline { fill: none; stroke: var(--muted); stroke-width: 1.2; opacity: 0.35; }
+.spline.strong { stroke: var(--accent); stroke-width: 2.5; opacity: 0.95; }

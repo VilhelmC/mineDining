@@ -24,12 +24,6 @@ describe("bracket table over every fixture", () => {
 			const leaves = t.cells.filter((c) => c.leaf?.kind === "ingredient");
 			expect(leaves.length).toBe(uses.length);
 			for (const c of leaves) expect(c.leaf?.kind === "ingredient" && c.leaf.quantity.length > 0).toBe(true);
-			// every tool is listed once (first use) or by its prep row; every use is shown
-			const first = t.cells.flatMap((c) => (c.leaf?.kind === "tool" && !c.leaf.again ? c.leaf.refs : []));
-			expect(new Set(first).size).toBe(first.length);
-			const tools = Object.entries(r.nodes).filter(([, n]) => n.kind === "tool").map(([id]) => id);
-			const prepTools = Object.values(r.nodes).flatMap((n) => (n.kind === "operation" && n.inputs.length === 0 ? n.tools ?? [] : []));
-			for (const id of tools) expect(first.includes(id) || prepTools.includes(id)).toBe(true);
 		});
 	}
 });

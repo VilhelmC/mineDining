@@ -13,18 +13,14 @@ import { displayName } from "../format";
  *  - an intermediate used by several operations is drawn in full at its
  *    first use (depth-first, in input order) and as a reference row after;
  *  - an ordering-only dependency with no inputs (preheat) is a "prep" row;
- *  - several outputs are joined by a final "serve" cell;
- *  - tools are rows in the bracket of the step that uses them: listed at
- *    their first use (depth-first), referred back to ("↑") after, except
- *    when the tool comes along with an input (same pan as the step before).
+ *  - several outputs are joined by a final "serve" cell.
+ * Tools are not rows: the view draws them as chips joined to their steps.
  */
 
 export type Leaf =
 	| { kind: "ingredient"; ref: string; name: string; quantity: string; optional: boolean }
 	| { kind: "reference"; ref: string; text: string }
-	| { kind: "prep"; op: string; text: string }
-	/** Tools a step needs: first use lists them, later uses refer back ("↑ chef's knife"). */
-	| { kind: "tool"; refs: string[]; text: string; again: boolean };
+	| { kind: "prep"; op: string; text: string };
 
 export interface TreeNode {
 	/** Operation id, or "serve" for the synthetic join of several outputs. */
@@ -72,7 +68,6 @@ export function buildTree(r: Recipe, steps: Step[]): TreeNode {
 	for (const [id, n] of Object.entries(nodes)) if (n.kind === "operation") for (const p of n.produces) producer.set(p, id);
 	const mention = new Map(steps.flatMap((s) => s.mentions.map((m) => [`${s.op}:${m.ref}`, m.quantity] as const)));
 	const drawn = new Set<string>();
-	const toolSeen = new Set<string>();
 	const name = (id: string) => (nodes[id] as { name: string }).name;
 
 	const grow = (opId: string, share?: string): TreeNode => {
@@ -95,24 +90,12 @@ export function buildTree(r: Recipe, steps: Step[]): TreeNode {
 			const dep = nodes[a] as Operation;
 			if (dep.inputs.length === 0) {
 				drawn.add(a);
-				for (const t of dep.tools ?? []) toolSeen.add(t);
 				const t = dep.params?.temperature;
 				const temp = !t ? "" : "heat" in t ? ` · ${t.heat} heat` : typeof t.value === "number" ? ` ${t.value} °C` : ` ${t.value.min}–${t.value.max} °C`;
 				const tools = (dep.tools ?? []).map(name).join(", ");
 				children.push({ kind: "prep", op: a, text: `${dep.verb} ${tools}${temp}`.trim() });
 			} else children.push(grow(a));
 		}
-		const tools = (op.tools ?? []).filter((t) => !(op.after ?? []).some((a) => (nodes[a] as Operation).inputs.length === 0 && ((nodes[a] as Operation).tools ?? []).includes(t)));
-		const fresh = tools.filter((t) => !toolSeen.has(t));
-		// a tool that arrives with the material (the pan from the previous step) needs no reference
-		const carried = new Set(op.inputs.flatMap((i) => {
-			const p = producer.get(i.ref);
-			return p ? ((nodes[p] as Operation).tools ?? []) : [];
-		}));
-		const again = tools.filter((t) => toolSeen.has(t) && !carried.has(t));
-		for (const t of fresh) toolSeen.add(t);
-		if (fresh.length) children.push({ kind: "tool", refs: fresh, text: fresh.map(name).join(", "), again: false });
-		if (again.length) children.push({ kind: "tool", refs: again, text: again.map(name).join(", "), again: true });
 		const height = 1 + Math.max(0, ...children.map((c) => (isLeaf(c) ? 0 : c.height)));
 		return { op: opId, share, children, height };
 	};

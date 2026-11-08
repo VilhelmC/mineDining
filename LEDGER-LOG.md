@@ -18,6 +18,16 @@
 
 ---
 
+### 2026-11-08 · C-APP · Tools as chips with curves
+[session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
+
+- **Wrote:** `app/src/views/IngredientTable.tsx` (chips, measured SVG curves, targets), `app/src/graph/tree.ts` (+ test: tool rows removed), `app/src/styles.css`; `LEDGER.md` C-8, §3; prompt.
+- **Rows:** C-8 updated.
+- **Decisions:** taken — chips + curves replace tool rows (Vilhelm).
+- **Answers acted on:** none.
+- **Prompts:** C-APP swept; falsifier still true. Tests 29 green; lasagna 15 and stir-fry 13 curves, no overflow at 412 px; first try drew curves over labels, moved behind the table.
+- **Next:** Vilhelm pushes; phone cook-through.
+
 ### 2026-11-08 · C-APP · Cooking on the recipe page; tools in the table
 [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
 

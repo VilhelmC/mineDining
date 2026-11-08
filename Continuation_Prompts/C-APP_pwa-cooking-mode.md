@@ -10,6 +10,7 @@
 NAME THIS CONVERSATION: C-APP · PWA scaffold + cooking mode
 
 PROMPT STATUS. Written 2026-11-08 · thread C-APP · purpose: CONTINUE
+UPDATED 2026-11-08 · C-APP · https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr — tools as chips with curves (replaces tool rows).
 UPDATED 2026-11-08 · C-APP · https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr — cooking on the recipe page, progress in all views, tools in the table (C-10).
 UPDATED 2026-11-08 · C-APP · https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr — C-9 latest-start scheduling done.
 UPDATED 2026-11-08 · C-APP · https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr — bracket-table ingredient list (C-8); C-9 proposed.
@@ -35,8 +36,8 @@ WHAT EXISTS (paths relative to the project root):
   - app/ — Vite + React + TS PWA (vite-plugin-pwa, manifest, icons). See
     app/README.md for layout, commands and the settled cooking-mode rules.
     Views: recipe list (bundled spec/fixtures through migrate+validate),
-    recipe view (bracket table of ingredients and tools — app/src/graph/
-    tree.ts; below it the step list, which is the cooking interface, and
+    recipe view (bracket table of ingredients — app/src/graph/tree.ts —
+    with tool chips above it joined to their steps by curves; below it the step list, which is the cooking interface, and
     a sticky bar with timeline: app/src/cook/session.tsx shares one
     session per recipe across all views), graph: Lanes (default; app/src/graph/lanes.ts — one
     card per operation, dependencies as lanes in a gutter, always fits the
@@ -125,6 +126,7 @@ Supersedes the C-ARCH prompt, whose commission (spec v0.1 + platform decision) i
 |---|---|---|---|
 | 2026-11-08 | C-ARCH | [session](https://claude.ai/code/session_01WGDGhYqkmSvqNPDEVbbK8L) | Written; supersedes `C-ARCH_schema-and-architecture.md`. Cold-read: 9 gaps, fixed — validator made browser-safe with a package entry (was blocked on `node:fs`); Step gains params/produces/dependsOn; C-APP may change validator code; cooking-mode questions listed; C-4 criteria; C-6 as open decision; stale ledger/brief text corrected. |
 | 2026-11-08 | C-APP | [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr) | Cold-read on start: 2 gaps, fixed — npm install on the device mount times out (constraint added); spec README tooling stale once the root became a workspace (§12 updated). Then C-1..C-3 done, C-4/C-5 drafted, C-6 proposed; purpose → CONTINUE; WHAT EXISTS, READ FIRST, tasks rewritten. Falsifier unchanged, still true. |
+| 2026-11-08 | C-APP | [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr) | Tool chips + curves; WHAT EXISTS swept. Falsifier still true. |
 | 2026-11-08 | C-APP | [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr) | C-10 (cooking on recipe page) done; OWNS, WHAT EXISTS swept. Falsifier still true. |
 | 2026-11-08 | C-APP | [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr) | C-9 done; WHAT EXISTS, tasks swept. Falsifier still true. |
 | 2026-11-08 | C-APP | [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr) | Bracket table (C-8); C-9 task; OWNS, WHAT EXISTS swept. Falsifier still true. |
