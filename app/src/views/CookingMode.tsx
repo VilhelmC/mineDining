@@ -52,15 +52,16 @@ export function CookingMode({ loaded }: { loaded: Loaded }) {
 		};
 	}, []);
 
-	// Alerts.
+	// Alerts. Not before the cook has tapped Start/Resume: audio is locked until then,
+	// so an alert due on the Resume screen waits and fires with sound after the tap.
 	useEffect(() => {
-		if (!state) return;
+		if (!state || !started) return;
 		const due = S.dueAlerts(steps, state, now);
 		if (!due.length) return;
 		for (const d of due) fireAlert(d.kind, byOp.get(d.op)!.text, d.op, notify);
 		setBanners((b) => [...b, ...due.map((d) => ({ ...d, text: byOp.get(d.op)!.text }))]);
 		update((s) => S.markFired(s, due));
-	}, [now, state, steps, byOp, notify, update]);
+	}, [now, state, started, steps, byOp, notify, update]);
 
 	const fg = state ? S.foreground(steps, state) : undefined;
 

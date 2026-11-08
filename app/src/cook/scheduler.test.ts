@@ -102,6 +102,21 @@ describe("scheduler rules", () => {
 		expect(S.dueAlerts(r, s, 1_500_000)).toEqual([{ op: "bake", kind: "end" }]);
 	});
 
+	it("a prep step (preheat) waits until it is within PREP_LEAD steps of being needed", () => {
+		const prep: Step = { ...step("preheat", "passive"), produces: [] };
+		const r = [prep, step("a", "active"), step("b", "active", ["a"]), step("c", "active", ["b"]), step("bake", "passive", ["c", "preheat"], 1800)];
+		let s = S.newState("x", 0);
+		expect(S.foreground(r, s)?.op).toBe("a"); // preheat is 3 steps away
+		expect(S.queue(r, s).map((x) => x.op)).toEqual(["a", "preheat"]); // still offered, last
+		s = S.done(s, "a", 1);
+		expect(S.foreground(r, s)?.op).toBe("preheat"); // 2 steps away: start it now
+	});
+
+	it("lasagna: preheat is not suggested first", () => {
+		const steps = generateSteps(load("lasagna.recipe.json"));
+		expect(S.foreground(steps, S.newState("x", 0))?.op).not.toBe("preheat-oven");
+	});
+
 	it("until-only passive: stopwatch, no alerts", () => {
 		const r = [step("reduce", "passive")];
 		const s = S.start(S.newState("x", 0), "reduce", 0);

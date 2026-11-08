@@ -3,6 +3,15 @@ import { quantity } from "@minedining/recipe-spec";
 import type { Loaded } from "../recipes";
 import { href } from "../router";
 
+/** "2 scallion" → "2 scallions": a bare count (no noun) of more than one names the ingredient in the plural. */
+function displayName(n: Ingredient): string {
+	const q = n.quantity;
+	if (!("unit" in q) || q.unit !== "count" || q.noun) return n.name;
+	const v = q.value;
+	if (typeof v === "number" && v <= 1) return n.name;
+	return /(s|sh|ch|x)$/.test(n.name) ? n.name + "es" : n.name + "s";
+}
+
 export function Issues({ loaded }: { loaded: Loaded }) {
 	if (!loaded.issues.length) return null;
 	return (
@@ -56,7 +65,7 @@ export function RecipeView({ loaded }: { loaded: Loaded }) {
 			<ul className="ingredients">
 				{ingredients.map(([id, n]) => (
 					<li key={id}>
-						<span className="qty">{quantity(n.quantity, n.name)}</span> <span>{n.name}</span>
+						<span className="qty">{quantity(n.quantity, n.name)}</span> <span>{displayName(n)}</span>
 						{n.optional && <span className="muted"> (optional)</span>}
 						{n.note && <div className="muted small">{n.note}</div>}
 					</li>

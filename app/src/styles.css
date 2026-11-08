@@ -115,14 +115,18 @@ button { font: inherit; color: inherit; }
 .legend { font-size: 0.75rem; color: var(--muted); display: flex; gap: 4px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-left: 6px; }
 .lg-ing { background: #e8e2d0; }
+@media (prefers-color-scheme: dark) { .lg-ing { background: #3b3829; } .lg-int { background: #26261f; } }
 .lg-int { background: #ffffff; border: 1px solid #999; }
 .lg-act { background: var(--active); }
 .lg-pas { background: var(--passive); }
-.react-flow__node.gn { font-size: 12px; line-height: 1.25; text-align: left; padding: 6px 8px; border-radius: 8px; color: #1d1d1b; border: 1px solid #b9b5aa; }
-.react-flow__node.gn-ingredient { background: #e8e2d0; }
-.react-flow__node.gn-intermediate { background: #ffffff; }
-.react-flow__node.gn-operation { background: #fff; border-width: 2px; border-radius: 16px; }
-.react-flow__node.gn-active { border-color: #c4572b; }
-.react-flow__node.gn-passive { border-color: #2f6db0; }
-.react-flow__node.gn-output { box-shadow: 0 0 0 3px #1f6f5c; }
-.gn-tools { color: #6b6a66; font-size: 11px; }
+.react-flow { --gn-ing: #e8e2d0; --gn-int: #ffffff; --gn-fg: #1d1d1b; --gn-muted: #6b6a66; --gn-line: #b9b5aa; --xy-background-color: var(--bg); --xy-edge-stroke: #8d8a82; }
+.react-flow.dark { --gn-ing: #3b3829; --gn-int: #26261f; --gn-fg: #ecebe6; --gn-muted: #a3a29c; --gn-line: #55534b; --xy-edge-stroke: #8d8a82; --xy-controls-button-background-color: #26261f; --xy-controls-button-color: #ecebe6; --xy-controls-button-border-color: #34332f; }
+.react-flow__node.gn { font-size: 13px; line-height: 1.25; text-align: left; padding: 6px 8px; border-radius: 8px; color: var(--gn-fg); border: 1px solid var(--gn-line); }
+.react-flow__node.gn-ingredient { background: var(--gn-ing); }
+.react-flow__node.gn-intermediate { background: var(--gn-int); }
+.react-flow__node.gn-operation { background: var(--gn-int); border-width: 2px; border-radius: 16px; }
+.react-flow__node.gn-active { border-color: var(--active); }
+.react-flow__node.gn-passive { border-color: var(--passive); }
+.react-flow__node.gn-output { box-shadow: 0 0 0 3px var(--accent); }
+.gn-tools { color: var(--gn-muted); font-size: 11px; }
+.react-flow__controls-button { width: 36px; height: 36px; }

@@ -11,7 +11,7 @@ import { durationText } from "../format";
 const W = 170;
 const H = 64;
 /** Below this zoom the 12 px node labels are unreadable on a phone. */
-const READABLE = 0.75;
+const READABLE = 1;
 
 /** Material/operation DAG, laid out left to right. Tools are shown inside their operation (spec §9 q2: not DAG edges). */
 export function buildGraph(r: Recipe): { nodes: FlowNode[]; edges: Edge[] } {
@@ -90,7 +90,7 @@ export function GraphView({ loaded }: { loaded: Loaded }) {
 				<span className="legend"><i className="lg-ing" />ingredient <i className="lg-int" />intermediate <i className="lg-act" />active <i className="lg-pas" />passive</span>
 			</header>
 			<div className="graph">
-				<ReactFlow nodes={nodes} edges={edges} onInit={onInit} minZoom={0.2} nodesDraggable={false} nodesConnectable={false} proOptions={{ hideAttribution: false }}>
+				<ReactFlow nodes={nodes} edges={edges} onInit={onInit} colorMode="system" minZoom={0.2} nodesDraggable={false} nodesConnectable={false} proOptions={{ hideAttribution: false }}>
 					<Background />
 					<Controls showInteractive={false} />
 				</ReactFlow>

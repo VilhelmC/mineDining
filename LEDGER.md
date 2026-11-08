@@ -58,8 +58,8 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 | C-2 | Recipe list from fixtures | `done` [cp] | bundled via `import.meta.glob`, through migrate+validate |
 | C-3 | Recipe view: ingredients, tools, generated steps | `done` [cp] | — |
 | C-4 | Graph view of the DAG | `done` [cp] | React Flow + dagre (Vilhelm, §3). Opens fitted when readable, else at zoom 0.75 on the first column (checked at phone size) |
-| C-5 | Cooking mode: step-by-step, Wake Lock, timers, passive steps | `drafted` [cp] | built per §3 behaviour decision; scheduler tested. `done` after a cook-through on Vilhelm's phone (needs C-6) |
-| C-6 | Phone testing route (HTTPS) | `active` [cp] | GitHub Pages (§3); phone Android + Chrome. On Vilhelm: enable Pages (Source: GitHub Actions), run the workflow, open the URL on the phone |
+| C-5 | Cooking mode: step-by-step, Wake Lock, timers, passive steps | `drafted` [cp] | built per §3; browser-tested on the deployed site (wake lock, alerts on resume, overdue). Prep steps (preheat) now just-in-time. `done` after a cook-through on Vilhelm's Android phone |
+| C-6 | Phone testing route (HTTPS) | `done` [cp] | live at https://vilhelmc.github.io/mineDining/; deploys on push to `main` (app/spec paths) |
 
 ### B · Backlog — later workstreams (no owner yet)
 
@@ -96,6 +96,9 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 | 2026-11-08 | Graph view library: React Flow (`@xyflow/react`) + `@dagrejs/dagre`, lazy-loaded | taken (Vilhelm) | C-4 | C-APP |
 | 2026-11-08 | Cooking mode: until-only passive = stopwatch + Done; range = alert at min and max; wall-clock timers, catch-up on return, optional system notification when hidden | taken (Vilhelm) | `app/README.md`, `app/src/cook/scheduler.ts` | C-APP |
 | 2026-11-08 | Phone testing route: GitHub Pages via manual workflow; test phone Android + Chrome | taken (Vilhelm) | C-6, `.github/workflows/pages.yml` | C-APP |
+| 2026-11-08 | Pages deploy runs on every push to `main` touching app/spec (was manual) | taken | `.github/workflows/pages.yml` | C-APP |
+| 2026-11-08 | Testing: the assistant tests in Vilhelm's Chrome (Claude in Chrome) and asks for manual tests only where a browser can't (phone sensors, audio, lock screen) | taken (Vilhelm) | C-APP prompt | C-APP |
+| 2026-11-08 | Prep steps (no inputs, no products: preheat) are suggested only within `PREP_LEAD` = 2 unfinished steps of being needed — heuristic until the spec carries a prep duration; the reference generator still lists them first (candidate for A-7) | taken | `app/src/cook/scheduler.ts` | C-APP |
 
 ---
 

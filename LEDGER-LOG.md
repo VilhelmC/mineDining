@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-11-08 · C-APP · Browser test round 1: fixes; auto-deploy
+[session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
+
+- **Wrote:** `app/src/cook/scheduler.ts` (+ test), `app/src/views/CookingMode.tsx`, `app/src/views/GraphView.tsx`, `app/src/views/RecipeView.tsx`, `app/src/styles.css`, `.github/workflows/pages.yml`; `LEDGER.md` C-5, C-6, §3; prompt.
+- **Rows:** C-6 `done` (site live); C-5 `drafted` (browser-tested; phone cook-through pending).
+- **Decisions:** taken — deploy on push; testing via Claude in Chrome (Vilhelm); prep-step heuristic.
+- **Answers acted on:** none.
+- **Prompts:** C-APP swept; falsifier still true.
+- **Found in Chrome on the deployed site, fixed:** graph unstyled in dark mode and labels too small at phone width; preheat suggested ~1 h early; alerts due on the Resume screen fired silently; "2 scallion". Verified working: wake lock held, overdue timer and banner after a simulated 31-min suspension, resume after reload.
+- **Next:** Vilhelm commits/pushes; assistant re-tests the deployed fixes in Chrome; phone cook-through.
+
 ### 2026-11-08 · C-APP · Phone route decided; graph readable on phone
 [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
 

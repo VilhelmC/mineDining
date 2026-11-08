@@ -1,10 +1,18 @@
-# C-6 proposal (open decision, LEDGER §3): deploy app/ to GitHub Pages for phone testing over HTTPS.
-# Manual trigger only — nothing runs on push. To use: repo Settings → Pages → Source: "GitHub Actions",
-# then Actions → "Deploy app to Pages" → Run workflow. URL: https://vilhelmc.github.io/mineDining/
+# C-6 (LEDGER §3): deploy app/ to GitHub Pages for phone testing over HTTPS.
+# Runs on every push to main that touches the app or the spec, and on demand
+# (Actions → "Deploy app to Pages" → Run workflow). URL: https://vilhelmc.github.io/mineDining/
 name: Deploy app to Pages
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - "spec/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/pages.yml"
 
 permissions:
   contents: read

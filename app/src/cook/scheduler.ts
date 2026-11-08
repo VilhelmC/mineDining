@@ -97,10 +97,50 @@ export function timer(step: Step, state: CookState, now: number): Timer | undefi
 	};
 }
 
-/** Ready (not yet started) steps, in suggestion order: passive first, then generator order. */
+/**
+ * A preparation step consumes and produces nothing (preheat the oven): it only
+ * has to be finished before the steps that wait on it through `after`.
+ */
+export const isPrep = (s: Step) => s.dependsOn.length === 0 && s.produces.length === 0;
+
+/**
+ * How many unfinished steps, other than `prep` itself, still stand before the
+ * nearest step that waits on `prep`. Infinity if nothing waits on it.
+ */
+export function lead(prep: Step, steps: Step[], state: CookState): number {
+	const byOp = new Map(steps.map((s) => [s.op, s]));
+	let best = Infinity;
+	for (const d of steps.filter((s) => s.dependsOn.includes(prep.op))) {
+		const seen = new Set<string>();
+		const walk = (op: string) => {
+			for (const a of byOp.get(op)?.dependsOn ?? []) {
+				if (a === prep.op || seen.has(a)) continue;
+				seen.add(a);
+				walk(a);
+			}
+		};
+		walk(d.op);
+		best = Math.min(best, [...seen].filter((a) => state.ops[a]?.doneAt === undefined).length);
+	}
+	return best;
+}
+
+/**
+ * Unfinished steps a prep step is started ahead of its dependents. A heuristic
+ * until the spec carries how long a prep step takes (e.g. preheat duration).
+ */
+export const PREP_LEAD = 2;
+
+/**
+ * Ready (not yet started) steps, in suggestion order: passive first, then
+ * generator order. Prep steps wait at the end of the queue until they are
+ * within PREP_LEAD steps of being needed, then go first.
+ */
 export function queue(steps: Step[], state: CookState): Step[] {
 	const ready = steps.filter((s) => statusOf(s, state) === "ready");
-	return [...ready.filter((s) => s.attention === "passive"), ...ready.filter((s) => s.attention === "active")];
+	const early = (s: Step) => isPrep(s) && lead(s, steps, state) > PREP_LEAD;
+	const now = ready.filter((s) => !early(s));
+	return [...now.filter((s) => s.attention === "passive"), ...now.filter((s) => s.attention === "active"), ...ready.filter(early)];
 }
 
 export const running = (steps: Step[], state: CookState) => steps.filter((s) => statusOf(s, state) === "running");
