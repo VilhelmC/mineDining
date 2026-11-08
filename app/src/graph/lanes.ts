@@ -8,8 +8,9 @@ import type { Operation, Recipe, Step } from "@minedining/recipe-spec";
  *
  * Row order: depth-first from the final operations, dependencies before
  * dependents, in the order the recipe lists them. A branch is drawn as a
- * contiguous block (all of the ragù, then all of the béchamel), and a step
- * needed only late (preheat) lands just above the step that waits for it.
+ * contiguous block (all of the ragù, then all of the béchamel). Prep steps
+ * (preheat) are placed by planned start time when a plan is given: before
+ * the first row planned to start after them.
  */
 
 export interface LaneIn {
@@ -38,7 +39,7 @@ export interface LaneLayout {
 	lanes: number;
 }
 
-export function order(steps: Step[]): Step[] {
+export function order(steps: Step[], start?: Map<string, number>): Step[] {
 	const byOp = new Map(steps.map((s) => [s.op, s]));
 	const used = new Set(steps.flatMap((s) => s.dependsOn));
 	const out: Step[] = [];
@@ -51,11 +52,19 @@ export function order(steps: Step[]): Step[] {
 	};
 	for (const s of steps) if (!used.has(s.op)) visit(s);
 	for (const s of steps) visit(s); // unreachable from a final step: should not happen in a valid recipe
-	return out;
+	if (!start) return out;
+	const isPrep = (s: Step) => s.dependsOn.length === 0 && s.produces.length === 0;
+	const rest = out.filter((s) => !isPrep(s));
+	for (const p of out.filter(isPrep)) {
+		const t = start.get(p.op) ?? 0;
+		const at = rest.findIndex((s) => (start.get(s.op) ?? 0) > t);
+		rest.splice(at < 0 ? rest.length : at, 0, p);
+	}
+	return rest;
 }
 
-export function laneLayout(steps: Step[], r: Recipe): LaneLayout {
-	const rows = order(steps);
+export function laneLayout(steps: Step[], r: Recipe, start?: Map<string, number>): LaneLayout {
+	const rows = order(steps, start);
 	const rowOf = new Map(rows.map((s, i) => [s.op, i]));
 	const lastUse = new Map<string, number>();
 	for (const s of rows) for (const d of s.dependsOn) lastUse.set(d, Math.max(lastUse.get(d) ?? -1, rowOf.get(s.op)!));

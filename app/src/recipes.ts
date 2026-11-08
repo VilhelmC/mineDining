@@ -1,11 +1,14 @@
 import { migrate, validate, generateSteps, type Issue, type Recipe, type Step } from "@minedining/recipe-spec";
+import { plan, type Plan } from "./cook/scheduler";
 
 /** A recipe as the app holds it: loaded through migrate() + validate(), never trusted raw. */
 export interface Loaded {
 	id: string;
 	file: string;
 	recipe?: Recipe;
+	/** Steps in planned order (cook mode's schedule, simulated), numbered 1..n. */
 	steps?: Step[];
+	plan?: Plan;
 	issues: Issue[];
 }
 
@@ -24,7 +27,8 @@ export function load(file: string, raw: unknown): Loaded {
 	const id = typeof (doc as { id?: unknown }).id === "string" ? (doc as { id: string }).id : fallbackId;
 	if (issues.some((i) => i.level === "error")) return { id, file, issues };
 	const recipe = doc as Recipe;
-	return { id, file, recipe, steps: generateSteps(recipe), issues };
+	const p = plan(generateSteps(recipe));
+	return { id, file, recipe, steps: p.steps, plan: p, issues };
 }
 
 export const recipes: Loaded[] = Object.entries(files)

@@ -13,7 +13,7 @@ function cookThrough(steps: Step[]) {
 	let t = 0;
 	for (let guard = 0; guard < 1000 && !S.finished(steps, s); guard++) {
 		t += 1000;
-		const fg = S.foreground(steps, s);
+		const fg = S.foreground(steps, s, t);
 		if (fg?.attention === "passive") s = S.start(s, fg.op, t);
 		else if (fg) s = S.done(s, fg.op, t);
 		else {
@@ -47,7 +47,7 @@ const step = (op: string, attention: Step["attention"], dependsOn: string[] = []
 	text: op,
 	mentions: [],
 	dependsOn,
-	produces: [],
+	produces: [`${op}-out`],
 	params: duration === undefined ? undefined : { duration: { value: duration, unit: "s" } },
 });
 
@@ -56,27 +56,27 @@ describe("scheduler rules", () => {
 
 	it("suggests passive work first, then generator order", () => {
 		const s = S.newState("x", 0);
-		expect(S.queue(steps, s).map((x) => x.op)).toEqual(["boil", "chop"]);
-		expect(S.foreground(steps, s)?.op).toBe("boil");
+		expect(S.queue(steps, s, 0).map((x) => x.op)).toEqual(["boil", "chop"]);
+		expect(S.foreground(steps, s, 0)?.op).toBe("boil");
 	});
 
 	it("a started passive step runs in the background while active work continues", () => {
 		let s = S.start(S.newState("x", 0), "boil", 0);
 		expect(S.statusOf(steps[0], s)).toBe("running");
-		expect(S.foreground(steps, s)?.op).toBe("chop");
+		expect(S.foreground(steps, s, 0)?.op).toBe("chop");
 		s = S.done(s, "chop", 1000);
-		expect(S.foreground(steps, s)?.op).toBe("fry");
+		expect(S.foreground(steps, s, 0)?.op).toBe("fry");
 		s = S.done(s, "fry", 2000);
-		expect(S.foreground(steps, s)).toBeUndefined(); // waiting on boil
+		expect(S.foreground(steps, s, 0)).toBeUndefined(); // waiting on boil
 		expect(S.statusOf(steps[3], s)).toBe("blocked");
 		s = S.done(s, "boil", 3000);
-		expect(S.foreground(steps, s)?.op).toBe("plate");
+		expect(S.foreground(steps, s, 0)?.op).toBe("plate");
 	});
 
 	it("focus overrides the suggestion while the chosen step is ready", () => {
 		const s = S.focus(S.newState("x", 0), "chop");
-		expect(S.foreground(steps, s)?.op).toBe("chop");
-		expect(S.foreground(steps, S.focus(s, "fry"))?.op).toBe("boil"); // fry is blocked
+		expect(S.foreground(steps, s, 0)?.op).toBe("chop");
+		expect(S.foreground(steps, S.focus(s, "fry"), 0)?.op).toBe("boil"); // fry is blocked
 	});
 
 	it("fixed duration: one end alert, wall-clock based", () => {
@@ -102,19 +102,43 @@ describe("scheduler rules", () => {
 		expect(S.dueAlerts(r, s, 1_500_000)).toEqual([{ op: "bake", kind: "end" }]);
 	});
 
-	it("a prep step (preheat) waits until it is within PREP_LEAD steps of being needed", () => {
-		const prep: Step = { ...step("preheat", "passive"), produces: [] };
-		const r = [prep, step("a", "active"), step("b", "active", ["a"]), step("c", "active", ["b"]), step("bake", "passive", ["c", "preheat"], 1800)];
+	it("a prep step starts at its latest start: dependent's start minus its duration", () => {
+		const prep: Step = { ...step("preheat", "passive", [], 600), produces: [] };
+		// three 5-min active steps before bake: bake can start in 15 min; preheat takes 10 → due after 5 min
+		const r = [prep, step("a", "active", [], 300), step("b", "active", ["a"], 300), step("c", "active", ["b"], 300), step("bake", "passive", ["c", "preheat"], 1800)];
 		let s = S.newState("x", 0);
-		expect(S.foreground(r, s)?.op).toBe("a"); // preheat is 3 steps away
-		expect(S.queue(r, s).map((x) => x.op)).toEqual(["a", "preheat"]); // still offered, last
-		s = S.done(s, "a", 1);
-		expect(S.foreground(r, s)?.op).toBe("preheat"); // 2 steps away: start it now
+		expect(S.foreground(r, s, 0)?.op).toBe("a");
+		expect(S.queue(r, s, 0).map((x) => x.op)).toEqual(["a", "preheat"]); // offered, last
+		s = S.start(s, "a", 0);
+		expect(S.prepDue(prep, r, s, 299_000)).toBe(false);
+		expect(S.foreground(r, s, 299_000)?.op).toBe("a"); // a is under way: not snatched
+		s = S.done(s, "a", 300_000);
+		expect(S.prepDue(prep, r, s, 300_000)).toBe(true);
+		expect(S.foreground(r, s, 300_000)?.op).toBe("preheat");
+		expect(S.dueAlerts(r, s, 300_000)).toContainEqual({ op: "preheat", kind: "start" });
+	});
+
+	it("a running timer counts: preheat waits for a long simmer", () => {
+		const prep: Step = { ...step("preheat", "passive", [], 900), produces: [] };
+		const r = [prep, step("simmer", "passive", [], 1800), step("bake", "passive", ["simmer", "preheat"], 1800)];
+		const s = S.start(S.newState("x", 0), "simmer", 0);
+		expect(S.foreground(r, s, 0)).toBeUndefined(); // waiting; preheat not yet due
+		expect(S.foreground(r, s, 900_000)?.op).toBe("preheat"); // 15 min left = preheat time
+	});
+
+	it("plan: lasagna preheats 15 min before baking can start", () => {
+		const p = S.plan(generateSteps(load("lasagna.recipe.json")));
+		const bake = p.start.get("bake")!;
+		const pre = p.start.get("preheat-oven")!;
+		expect(bake - pre).toBeGreaterThanOrEqual(900);
+		expect(bake - pre).toBeLessThan(900 + 300); // no more than one untimed step early
+		expect(p.steps.map((s) => s.n)).toEqual(p.steps.map((_, i) => i + 1));
+		expect(p.estimated).toBe(true);
 	});
 
 	it("lasagna: preheat is not suggested first", () => {
 		const steps = generateSteps(load("lasagna.recipe.json"));
-		expect(S.foreground(steps, S.newState("x", 0))?.op).not.toBe("preheat-oven");
+		expect(S.foreground(steps, S.newState("x", 0), 0)?.op).not.toBe("preheat-oven");
 	});
 
 	it("until-only passive: stopwatch, no alerts", () => {

@@ -33,3 +33,5 @@ npm run build -w app
 - Fixed duration → alert at the end. Range → "check" alert at min, "end" alert at max. `until` only → stopwatch, no alert.
 - Timers are wall-clock, so they survive a locked phone; alerts cannot ring while the page is suspended — overdue timers show on return. Sound + vibration (not iOS Safari) + flashing banner; optional system notification when the page is hidden (permission asked; unreliable on iOS).
 - Session saved in localStorage per recipe (resume / start over).
+- Prep steps (preheat) start at their latest start: due when the step waiting on them can begin within the prep's duration (critical path with live timers, or the cook's remaining hands-on work, whichever is longer). A "Start now" alert fires once. Untimed steps count 5 min hands-on, 10 min waiting (estimates).
+- Everywhere in the app, steps follow the plan cook mode would suggest (`plan()` simulates it) and are numbered in that order; the recipe page shows planned start times and the estimated total.

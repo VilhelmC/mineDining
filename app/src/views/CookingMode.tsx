@@ -63,7 +63,7 @@ export function CookingMode({ loaded }: { loaded: Loaded }) {
 		update((s) => S.markFired(s, due));
 	}, [now, state, started, steps, byOp, notify, update]);
 
-	const fg = state ? S.foreground(steps, state) : undefined;
+	const fg = state ? S.foreground(steps, state, now) : undefined;
 
 	// An active step's clock starts when it reaches the foreground.
 	useEffect(() => {
@@ -114,7 +114,7 @@ export function CookingMode({ loaded }: { loaded: Loaded }) {
 	}
 
 	const run = S.running(steps, state);
-	const others = S.queue(steps, state).filter((s) => s !== fg);
+	const others = S.queue(steps, state, now).filter((s) => s !== fg);
 	const doneSteps = steps.filter((s) => S.statusOf(s, state) === "done").sort((a, b) => state.ops[b.op].doneAt! - state.ops[a.op].doneAt!);
 	const ack = (op: string) => setBanners((b) => b.filter((x) => x.op !== op));
 	const markDone = (op: string) => {
@@ -140,7 +140,7 @@ export function CookingMode({ loaded }: { loaded: Loaded }) {
 				<div className="banners">
 					{banners.map((b) => (
 						<div key={`${b.op}:${b.kind}`} className={`banner ${b.kind}`} onClick={() => ack(b.op)}>
-							<strong>{b.kind === "check" ? "Check now" : "Time’s up"}</strong> — {b.text}
+							<strong>{b.kind === "check" ? "Check now" : b.kind === "start" ? "Start now" : "Time’s up"}</strong> — {b.text}
 							<span className="banner-ok">OK</span>
 						</div>
 					))}
@@ -154,7 +154,7 @@ export function CookingMode({ loaded }: { loaded: Loaded }) {
 					<button className="big" onClick={() => { clearSession(loaded.id); setState(undefined); setStarted(false); }}>Finish</button>
 				</section>
 			) : fg ? (
-				<Foreground step={fg} state={state} now={now} onStart={() => update((s) => S.focus(S.start(s, fg.op, Date.now()), undefined))} onDone={() => markDone(fg.op)} onRestart={() => update((s) => S.restart(s, fg.op, Date.now()))} />
+				<Foreground step={fg} state={state} now={now} onStart={() => { ack(fg.op); update((s) => S.focus(S.start(s, fg.op, Date.now()), undefined)); }} onDone={() => markDone(fg.op)} onRestart={() => update((s) => S.restart(s, fg.op, Date.now()))} />
 			) : (
 				<section className="fg waiting">
 					<p className="fg-label">Waiting</p>

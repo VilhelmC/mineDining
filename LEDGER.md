@@ -48,7 +48,7 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 | A-4 | Recipe DAG spec v0.1 + versioning policy (`spec/VERSIONING.md`, `spec/CHANGELOG.md`) | `done` | v0.1.0, `spec/README.md` |
 | A-5 | Validator + "nothing implicit" acceptance test | `done` | `spec/validator/`, `npm test` green |
 | A-6 | Platform decision (PWA vs React Native) | `done` | PWA, React + TS (§3) |
-| A-7 | Spec revision candidates (`spec/CHANGELOG.md` Unreleased) | `todo` | adopt each only with a fixture showing the need; first likely: input roles, verb vocabulary |
+| A-7 | Spec revision candidates (`spec/CHANGELOG.md` Unreleased) | `todo` | adopt each only with a fixture showing the need; first likely: input roles, verb vocabulary. C-APP added 2026-11-08: step durations everywhere, generator order; fixture preheat durations (data only) |
 
 ### C · App · owner C-APP
 
@@ -59,7 +59,7 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 | C-3 | Recipe view: ingredients, tools, generated steps | `done` [cp] | — |
 | C-4 | Graph view of the DAG | `done` [cp] | Lanes (default, fits phone width; `app/src/graph/lanes.ts`, `app/src/views/LaneView.tsx`) + Map (React Flow + dagre, left to right, for wide screens) (§3) |
 | C-8 | Recipe view: ingredient list as a bracket table (ingredients down, nested step brackets right = compact DAG) | `done` [cp] | `app/src/graph/tree.ts`, `app/src/views/IngredientTable.tsx`; plain list kept under a toggle; fits 412 px on all fixtures |
-| C-9 | Latest-start scheduling (backward pass): prep steps (preheat) start at their latest start; needs a preheat duration in fixtures and an estimate for untimed active steps | `todo` [cp] | proposed 2026-11-08, awaiting Vilhelm's go; would replace `PREP_LEAD` |
+| C-9 | Latest-start scheduling: prep steps (preheat) start at their latest start | `done` [cp] | `app/src/cook/scheduler.ts` (`startsIn`, `prepDue`, `plan`); "Start now" alert; step list and lanes in planned order with start times and total; fixture preheat durations (`spec/CHANGELOG.md`) |
 | C-7 | Collapsible sub-recipes in the lane view (fold ragù, béchamel into one card) | `todo` [cp] | after C-5; needs sub-recipe detection (single-exit branch); feeds courses (B-5) |
 | C-5 | Cooking mode: step-by-step, Wake Lock, timers, passive steps | `drafted` [cp] | built per §3; browser-tested on the deployed site (wake lock, alerts on resume, overdue). Prep steps (preheat) now just-in-time. `done` after a cook-through on Vilhelm's Android phone |
 | C-6 | Phone testing route (HTTPS) | `done` [cp] | live at https://vilhelmc.github.io/mineDining/; deploys on push to `main` (app/spec paths) |
@@ -104,7 +104,8 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 | 2026-11-08 | Ingredient list = bracket table (tabular recipe notation; Cooking for Engineers' own table structure still unverified, `docs/prior-art.md` §5). Rules: step column = its height; split intermediate drawn at first use, referenced after ("↑ rest of the béchamel"); prep steps (preheat) are rows in the dependent's bracket; several outputs joined by "serve together"; step labels vertical to keep columns narrow | taken (Vilhelm asked; rules C-APP) | `app/src/graph/tree.ts` | C-APP |
 | 2026-11-08 | Pages deploy runs on every push to `main` touching app/spec (was manual) | taken | `.github/workflows/pages.yml` | C-APP |
 | 2026-11-08 | Testing: the assistant tests in Vilhelm's Chrome (Claude in Chrome) and asks for manual tests only where a browser can't (phone sensors, audio, lock screen) | taken (Vilhelm) | C-APP prompt | C-APP |
-| 2026-11-08 | Prep steps (no inputs, no products: preheat) are suggested only within `PREP_LEAD` = 2 unfinished steps of being needed — heuristic until the spec carries a prep duration; the reference generator still lists them first (candidate for A-7) | taken | `app/src/cook/scheduler.ts` | C-APP |
+| 2026-11-08 | Prep steps (no inputs, no products: preheat) are suggested only within `PREP_LEAD` = 2 unfinished steps of being needed | superseded same day by latest-start scheduling (next row) | — | C-APP |
+| 2026-11-08 | Latest-start scheduling: a prep step falls due when the step waiting on it can start within the prep's duration; estimate = max(critical path with live timers, cook's remaining hands-on work in series); untimed steps 5 min active / 10 min passive, labelled estimates. Steps everywhere in the app follow the simulated plan and are renumbered; the reference generator is unchanged (A-7 candidate) | taken (Vilhelm) | `app/src/cook/scheduler.ts` | C-APP |
 
 ---
 

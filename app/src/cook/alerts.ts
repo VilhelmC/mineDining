@@ -57,7 +57,7 @@ async function notify(title: string, body: string, tag: string): Promise<void> {
 }
 
 export function fireAlert(kind: AlertKind, stepText: string, op: string, wantNotify: boolean): void {
-	if (kind === "check") {
+	if (kind === "check" || kind === "start") {
 		beep(2, 660);
 		navigator.vibrate?.([150, 100, 150]);
 	} else {
@@ -65,6 +65,6 @@ export function fireAlert(kind: AlertKind, stepText: string, op: string, wantNot
 		navigator.vibrate?.([300, 150, 300, 150, 300]);
 	}
 	if (wantNotify && document.visibilityState === "hidden") {
-		void notify(kind === "check" ? "Check now" : "Timer done", stepText, `${op}:${kind}`);
+		void notify(kind === "check" ? "Check now" : kind === "start" ? "Start now" : "Timer done", stepText, `${op}:${kind}`);
 	}
 }

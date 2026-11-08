@@ -10,6 +10,7 @@
 NAME THIS CONVERSATION: C-APP · PWA scaffold + cooking mode
 
 PROMPT STATUS. Written 2026-11-08 · thread C-APP · purpose: CONTINUE
+UPDATED 2026-11-08 · C-APP · https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr — C-9 latest-start scheduling done.
 UPDATED 2026-11-08 · C-APP · https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr — bracket-table ingredient list (C-8); C-9 proposed.
 UPDATED 2026-11-08 · C-APP · https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr — lane graph view (default) + Map; C-7 added.
 UPDATED 2026-11-08 · C-APP · https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr — graph layout vertical (Vilhelm).
@@ -44,8 +45,11 @@ WHAT EXISTS (paths relative to the project root):
   - Live at https://vilhelmc.github.io/mineDining/ — .github/workflows/
     pages.yml deploys on every push to main touching app/ or spec/
     (BASE=/mineDining/). Test phone: Android + Chrome.
-  - Scheduler extras: prep steps (preheat) are just-in-time (PREP_LEAD);
-    alerts wait for the Start/Resume tap (audio unlock).
+  - Scheduler extras: prep steps (preheat) start at their latest start
+    (startsIn/prepDue), with a "Start now" alert; plan() simulates cook
+    mode and fixes step order and numbering app-wide (recipe page shows
+    start times and total). Alerts wait for the Start/Resume tap.
+  - spec/fixtures: preheat durations added (data only, spec/CHANGELOG.md).
 
 READ FIRST, in order:
   1. LEDGER.md workstream C and §3 — row states and decisions.
@@ -67,13 +71,9 @@ OPEN TASKS, in order:
   2. C-5 Cook-through of one fixture on his phone: wake lock held, alerts
      (sound, vibration, notification when hidden), resume after lock/reload.
      Fix what fails; row → `done` when he confirms.
-  3. C-9 Latest-start scheduling, if Vilhelm agrees: backward pass over
-     durations; preheat duration added to fixtures (data, no schema change);
-     estimate for untimed active steps; replaces PREP_LEAD in cook mode and
-     places prep steps in the lane view and step list.
-  4. C-7 Collapsible sub-recipes in the lane view (Vilhelm: lanes first,
+  3. C-7 Collapsible sub-recipes in the lane view (Vilhelm: lanes first,
      this later).
-  5. Bundle: the main chunk is ~400 kB (Ajv compiles the schema at runtime).
+  4. Bundle: the main chunk is ~400 kB (Ajv compiles the schema at runtime).
      Optional: precompile the validator (Ajv standalone) if load time hurts.
   Order reason: C-5 is the goal and needs C-6 to be tested at all.
   After C-5: the spec revision round (A-7, input roles for better step
@@ -122,6 +122,7 @@ Supersedes the C-ARCH prompt, whose commission (spec v0.1 + platform decision) i
 |---|---|---|---|
 | 2026-11-08 | C-ARCH | [session](https://claude.ai/code/session_01WGDGhYqkmSvqNPDEVbbK8L) | Written; supersedes `C-ARCH_schema-and-architecture.md`. Cold-read: 9 gaps, fixed — validator made browser-safe with a package entry (was blocked on `node:fs`); Step gains params/produces/dependsOn; C-APP may change validator code; cooking-mode questions listed; C-4 criteria; C-6 as open decision; stale ledger/brief text corrected. |
 | 2026-11-08 | C-APP | [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr) | Cold-read on start: 2 gaps, fixed — npm install on the device mount times out (constraint added); spec README tooling stale once the root became a workspace (§12 updated). Then C-1..C-3 done, C-4/C-5 drafted, C-6 proposed; purpose → CONTINUE; WHAT EXISTS, READ FIRST, tasks rewritten. Falsifier unchanged, still true. |
+| 2026-11-08 | C-APP | [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr) | C-9 done; WHAT EXISTS, tasks swept. Falsifier still true. |
 | 2026-11-08 | C-APP | [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr) | Bracket table (C-8); C-9 task; OWNS, WHAT EXISTS swept. Falsifier still true. |
 | 2026-11-08 | C-APP | [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr) | Lane graph + Map; C-7 task; OWNS, WHAT EXISTS swept. Falsifier still true. |
 | 2026-11-08 | C-APP | [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr) | Graph layout vertical; WHAT EXISTS swept. Falsifier still true. |

@@ -173,6 +173,10 @@
 				"oven"
 			],
 			"params": {
+				"duration": {
+					"value": 900,
+					"unit": "s"
+				},
 				"temperature": {
 					"value": 180,
 					"unit": "C"

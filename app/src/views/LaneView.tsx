@@ -108,7 +108,7 @@ export function GraphHeader({ loaded, view }: { loaded: Loaded; view: "graph" | 
 export function LaneView({ loaded }: { loaded: Loaded }) {
 	const recipe = loaded.recipe!;
 	const steps = loaded.steps!;
-	const layout = useMemo(() => laneLayout(steps, recipe), [steps, recipe]);
+	const layout = useMemo(() => laneLayout(steps, recipe, loaded.plan?.start), [steps, recipe, loaded.plan]);
 	return (
 		<div className="cook">
 			<GraphHeader loaded={loaded} view="graph" />

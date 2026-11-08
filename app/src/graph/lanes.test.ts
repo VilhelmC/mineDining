@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync, readdirSync } from "node:fs";
 import { generateSteps, type Recipe } from "@minedining/recipe-spec";
 import { laneLayout, order } from "./lanes";
+import { plan } from "../cook/scheduler";
 
 const dir = new URL("../../../spec/fixtures/", import.meta.url);
 const load = (f: string) => JSON.parse(readFileSync(new URL(f, dir), "utf8")) as Recipe;
@@ -11,7 +12,8 @@ describe("lane layout over every fixture", () => {
 		it(f, () => {
 			const r = load(f);
 			const steps = generateSteps(r);
-			const { rows, lanes } = laneLayout(steps, r);
+			const p = plan(steps);
+			const { rows, lanes } = laneLayout(p.steps, r, p.start);
 			expect(rows.length).toBe(steps.length);
 			const at = new Map(rows.map((x, i) => [x.step.op, i]));
 			for (const [i, x] of rows.entries()) {
@@ -28,8 +30,12 @@ describe("lane layout over every fixture", () => {
 	}
 });
 
-it("lasagna: branches are contiguous and preheat sits just above bake", () => {
-	const ops = order(generateSteps(load("lasagna.recipe.json"))).map((s) => s.op);
+it("lasagna: branches are contiguous; with a plan, preheat sits where it starts in time", () => {
+	const steps = generateSteps(load("lasagna.recipe.json"));
+	const ops = order(steps).map((s) => s.op);
 	expect(ops.indexOf("bake") - ops.indexOf("preheat-oven")).toBe(1);
+	const p = plan(steps);
+	const timed = order(p.steps, p.start).map((s) => s.op);
+	expect(timed.indexOf("preheat-oven")).toBeLessThan(timed.indexOf("top"));
 	expect(ops.indexOf("make-bechamel") - ops.indexOf("make-roux")).toBe(1);
 });

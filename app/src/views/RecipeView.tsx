@@ -3,7 +3,13 @@ import { quantity } from "@minedining/recipe-spec";
 import type { Loaded } from "../recipes";
 import { href } from "../router";
 import { IngredientTable } from "./IngredientTable";
-import { displayName } from "../format";
+import { clock, displayName } from "../format";
+import { ACTIVE_DEFAULT, PASSIVE_DEFAULT } from "../cook/scheduler";
+
+function totalText(s: number): string {
+	const m = Math.round(s / 60);
+	return m < 60 ? `${m} min` : `${Math.floor(m / 60)} h ${m % 60} min`;
+}
 
 export function Issues({ loaded }: { loaded: Loaded }) {
 	if (!loaded.issues.length) return null;
@@ -80,15 +86,20 @@ export function RecipeView({ loaded }: { loaded: Loaded }) {
 			</ul>
 
 			<h2>Steps</h2>
+			{loaded.plan && (
+				<p className="muted">
+					About {totalText(loaded.plan.total)} in total{loaded.plan.estimated ? ` (estimate: steps without a time count ${ACTIVE_DEFAULT / 60} min hands-on, ${PASSIVE_DEFAULT / 60} min waiting)` : ""}.
+				</p>
+			)}
 			<ol className="steps">
 				{loaded.steps!.map((s) => (
 					<li key={s.op}>
-						<span className={`badge ${s.attention}`}>{s.attention}</span> {s.text}
+						<span className="at">{clock(loaded.plan?.start.get(s.op) ?? 0)}</span> <span className={`badge ${s.attention}`}>{s.attention}</span> {s.text}
 						{s.note && <div className="muted small">{s.note}</div>}
 					</li>
 				))}
 			</ol>
-			<p className="muted small">Steps are generated from the recipe graph; passive steps are listed as early as they can start.</p>
+			<p className="muted small">Steps are generated from the recipe graph and ordered as cooking mode will suggest them: waiting steps start early, preheating starts at the latest time that still has the oven hot when needed. Times are planned starts.</p>
 		</div>
 	);
 }

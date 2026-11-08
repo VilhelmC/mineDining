@@ -18,6 +18,16 @@
 
 ---
 
+### 2026-11-08 · C-APP · Latest-start scheduling (C-9)
+[session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
+
+- **Wrote:** `app/src/cook/scheduler.ts` (+ test), `app/src/cook/alerts.ts`, `app/src/recipes.ts`, `app/src/graph/lanes.ts` (+ test), `app/src/views/CookingMode.tsx`, `app/src/views/LaneView.tsx`, `app/src/views/RecipeView.tsx`, `app/src/styles.css`, `app/README.md`; `spec/fixtures/lasagna.recipe.json`, `spec/fixtures/meringues.recipe.json` (preheat durations, data only); `spec/CHANGELOG.md`; `LEDGER.md` A-7, C-9, §3; prompt.
+- **Rows:** C-9 `done`; A-7 note (two new candidates).
+- **Decisions:** taken — latest-start scheduling (Vilhelm); `PREP_LEAD` superseded.
+- **Answers acted on:** none.
+- **Prompts:** C-APP swept; falsifier still true. Tests: app 28, spec 24 green. Phone-size headless run: lasagna plan preheats at 45 min for a 60-min bake; cook mode raised "Start now" with 4 min of simmer left, not at 16 min.
+- **Next:** Vilhelm pushes; re-test deployed site in Chrome; phone cook-through (C-5).
+
 ### 2026-11-08 · C-APP · Bracket-table ingredient list
 [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
 
