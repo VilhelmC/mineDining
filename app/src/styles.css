@@ -130,3 +130,30 @@ button { font: inherit; color: inherit; }
 .react-flow__node.gn-output { box-shadow: 0 0 0 3px var(--accent); }
 .gn-tools { color: var(--gn-muted); font-size: 11px; }
 .react-flow__controls-button { width: 36px; height: 36px; }
+
+/* Lane graph */
+.view-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.view-toggle a { padding: 4px 12px; font-size: 0.85rem; text-decoration: none; color: var(--fg); }
+.view-toggle a.on { background: var(--accent); color: var(--accent-fg); }
+.lanes { padding: 8px 0 32px; }
+.lane-row { display: flex; align-items: stretch; }
+.gutter { position: relative; flex: none; }
+.ln { position: absolute; display: block; }
+.ln.v { width: 0; border-left: 2px solid var(--muted); margin-left: -1px; }
+.ln.h { height: 0; border-top: 2px solid var(--muted); margin-top: -1px; }
+.ln.v.dashed { border-left-style: dashed; }
+.ln.h.dashed { border-top-style: dashed; }
+.dot { position: absolute; display: block; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--active); box-shadow: 0 0 0 3px var(--bg); }
+.dot.passive { background: var(--bg); border: 3px solid var(--passive); }
+.lane-card { flex: 1; min-width: 0; margin: 4px 0 8px 6px; padding: 8px 12px; border-radius: 10px; background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--active); font-size: 0.95rem; }
+.lane-card.passive { border-left-color: var(--passive); }
+.lc-head { display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline; }
+.lc-verb { text-transform: capitalize; font-size: 1.05rem; }
+.lc-chip { font-size: 0.78rem; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.lc-chip.passive { color: var(--passive); border-color: var(--passive); }
+.lc-from { margin-top: 2px; color: var(--muted); }
+.lc-ing { list-style: none; padding: 0; margin: 2px 0 0; }
+.lc-until, .lc-note { color: var(--muted); font-style: italic; font-size: 0.88rem; }
+.lc-tools { color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
+.lc-out { margin-top: 4px; font-weight: 600; }
+.lc-out .serve { color: var(--accent); }

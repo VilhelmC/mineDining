@@ -5,6 +5,7 @@ export type Route =
 	| { name: "list" }
 	| { name: "recipe"; id: string }
 	| { name: "graph"; id: string }
+	| { name: "map"; id: string }
 	| { name: "cook"; id: string };
 
 export function parse(hash: string): Route {
@@ -12,6 +13,7 @@ export function parse(hash: string): Route {
 	if (parts[0] === "r" && parts[1]) {
 		const id = decodeURIComponent(parts[1]);
 		if (parts[2] === "graph") return { name: "graph", id };
+		if (parts[2] === "map") return { name: "map", id };
 		if (parts[2] === "cook") return { name: "cook", id };
 		return { name: "recipe", id };
 	}

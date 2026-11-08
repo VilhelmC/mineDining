@@ -57,7 +57,8 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 | C-1 | PWA scaffold in `app/`, spec package wired in | `done` [cp] | npm workspaces at root (§3); `app/README.md`. Vilhelm: `npm install` at root on Windows |
 | C-2 | Recipe list from fixtures | `done` [cp] | bundled via `import.meta.glob`, through migrate+validate |
 | C-3 | Recipe view: ingredients, tools, generated steps | `done` [cp] | — |
-| C-4 | Graph view of the DAG | `done` [cp] | React Flow + dagre; vertical (top-to-bottom) layout, opens at the top, scrolls (§3). Graphs wider than a phone (lasagna) need a sideways drag |
+| C-4 | Graph view of the DAG | `done` [cp] | Lanes (default, fits phone width; `app/src/graph/lanes.ts`, `app/src/views/LaneView.tsx`) + Map (React Flow + dagre, left to right, for wide screens) (§3) |
+| C-7 | Collapsible sub-recipes in the lane view (fold ragù, béchamel into one card) | `todo` [cp] | after C-5; needs sub-recipe detection (single-exit branch); feeds courses (B-5) |
 | C-5 | Cooking mode: step-by-step, Wake Lock, timers, passive steps | `drafted` [cp] | built per §3; browser-tested on the deployed site (wake lock, alerts on resume, overdue). Prep steps (preheat) now just-in-time. `done` after a cook-through on Vilhelm's Android phone |
 | C-6 | Phone testing route (HTTPS) | `done` [cp] | live at https://vilhelmc.github.io/mineDining/; deploys on push to `main` (app/spec paths) |
 
@@ -97,6 +98,7 @@ Each thread gets a key (`C-XXX`). Paste the conversation link when you open it �
 | 2026-11-08 | Cooking mode: until-only passive = stopwatch + Done; range = alert at min and max; wall-clock timers, catch-up on return, optional system notification when hidden | taken (Vilhelm) | `app/README.md`, `app/src/cook/scheduler.ts` | C-APP |
 | 2026-11-08 | Phone testing route: GitHub Pages via manual workflow; test phone Android + Chrome | taken (Vilhelm) | C-6, `.github/workflows/pages.yml` | C-APP |
 | 2026-11-08 | Graph layout is vertical (top to bottom, toposort order downward), opening at the top and scrolling like a page; supersedes left-to-right | taken (Vilhelm) | `app/src/views/GraphView.tsx` | C-APP |
+| 2026-11-08 | The graph must fit the screen width: default view is a lane graph (one card per operation, dependencies as lanes in a left gutter, depth-first branch order); node-link Map kept for wide screens; collapsible sub-recipes later (C-7) | taken (Vilhelm) | `app/src/graph/lanes.ts`, `app/src/views/LaneView.tsx` | C-APP |
 | 2026-11-08 | Pages deploy runs on every push to `main` touching app/spec (was manual) | taken | `.github/workflows/pages.yml` | C-APP |
 | 2026-11-08 | Testing: the assistant tests in Vilhelm's Chrome (Claude in Chrome) and asks for manual tests only where a browser can't (phone sensors, audio, lock screen) | taken (Vilhelm) | C-APP prompt | C-APP |
 | 2026-11-08 | Prep steps (no inputs, no products: preheat) are suggested only within `PREP_LEAD` = 2 unfinished steps of being needed — heuristic until the spec carries a prep duration; the reference generator still lists them first (candidate for A-7) | taken | `app/src/cook/scheduler.ts` | C-APP |

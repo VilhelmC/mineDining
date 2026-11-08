@@ -18,6 +18,16 @@
 
 ---
 
+### 2026-11-08 · C-APP · Lane graph view
+[session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
+
+- **Wrote:** `app/src/graph/lanes.ts` (+ `lanes.test.ts`), `app/src/views/LaneView.tsx` (new); `app/src/views/GraphView.tsx` (Map, left to right, fitView), `app/src/router.ts` (`#/r/<id>/map`), `app/src/App.tsx`, `app/src/styles.css`; `LEDGER.md` C-4, C-7, §3; prompt.
+- **Rows:** C-4 `done` (lanes + map); C-7 added `todo`.
+- **Decisions:** taken — lane graph default, must fit width; sub-recipes later (Vilhelm).
+- **Answers acted on:** none.
+- **Prompts:** C-APP swept; falsifier still true. Tests 20 green; at 412 px no horizontal overflow on any checked fixture, dark and light.
+- **Next:** Vilhelm pushes; re-test deployed site in Chrome.
+
 ### 2026-11-08 · C-APP · Graph layout vertical
 [session](https://claude.ai/code/session_01WGDGhb1cAHLoyMNLZwZ6nr)
 
